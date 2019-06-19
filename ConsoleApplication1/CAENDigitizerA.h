@@ -4,12 +4,11 @@
 #define __CAENDIGITIZER_H
 #endif
 #define win32
+#define IGNORE_DPP_DEPRECATED
 #include <stdarg.h>
 #include "CAENDigitizerType.h"
 
 #define FUNC_LOADED 3456
-#define ERR_CANNOT_LOAD_FUNCTION -100L
-#define ERR_CANNOT_LOAD_LIBRARY -101L
 
 #if !defined(CAEN_USE_DIGITIZERS) && !defined(IGNORE_DPP_DEPRECATED)
 
@@ -54,20 +53,20 @@ public:
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_VMEIACKCycle(int VMEHandle, uint8_t level, int32_t* board_id) = 0;
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_SetDESMode(int handle, CAEN_DGTZ_EnaDis_t enable) = 0;
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_GetDESMode(int handle, CAEN_DGTZ_EnaDis_t* enable) = 0;
-/**************************************************************************//**
-* \brief     Sets acquisition record length
-*
-* \param     [IN] handle  : digitizer handle
-* \param     [IN] size    : the size of the record (in samples)
-* \param    [IN] channel : \c int specifying the channel to set the record length for.
-*                           DPP-PSD and DPP-CI require this parameter,
-*                           DPP-PHA ignores it
-*                           Now Always Provide A int Number.
-* \return  0 = Success; negative numbers are error codes
-******************************************************************************/
-	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_SetRecordLength(int handle, uint32_t size,int channel) = 0;
+	/**************************************************************************//**
+	* \brief     Sets acquisition record length
+	*
+	* \param     [IN] handle  : digitizer handle
+	* \param     [IN] size    : the size of the record (in samples)
+	* \param    [IN] channel : \c int specifying the channel to set the record length for.
+	*                           DPP-PSD and DPP-CI require this parameter,
+	*                           DPP-PHA ignores it
+	*                           Now Always Provide A int Number.
+	* \return  0 = Success; negative numbers are error codes
+	******************************************************************************/
+	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_SetRecordLength(int handle, uint32_t size, int channel) = 0;
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_GetRecordLength(int handle, uint32_t* size, int channel) = 0;//so as CAEN_DGTZ_SetRecordLength
-	
+
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_SetChannelEnableMask(int handle, uint32_t mask) = 0;
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_GetChannelEnableMask(int handle, uint32_t* mask) = 0;
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_SetGroupEnableMask(int handle, uint32_t mask) = 0;
@@ -128,8 +127,8 @@ public:
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_MallocDPPWaveforms(int handle, void** waveforms, uint32_t* allocatedSize) = 0;
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_FreeDPPWaveforms(int handle, void* Waveforms) = 0;
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_DecodeDPPWaveforms(int handle, void* event, void* waveforms) = 0;
-	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_SetNumEventsPerAggregate(int handle, uint32_t numEvents, ...) = 0;
-	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_GetNumEventsPerAggregate(int handle, uint32_t* numEvents, ...) = 0;
+	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_SetNumEventsPerAggregate(int handle, uint32_t numEvents, int channel) = 0;
+	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_GetNumEventsPerAggregate(int handle, uint32_t* numEvents, int channel) = 0;
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_SetDPPEventAggregation(int handle, int threshold, int maxsize) = 0;
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_SetDPPParameters(int handle, uint32_t channelMask, void* params) = 0;
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_SetDPPAcquisitionMode(int handle, CAEN_DGTZ_DPP_AcqMode_t mode, CAEN_DGTZ_DPP_SaveParam_t param) = 0;
@@ -152,6 +151,9 @@ public:
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_SetTriggerPolarity(int handle, uint32_t channel, CAEN_DGTZ_TriggerPolarity_t Polarity) = 0;
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_GetTriggerPolarity(int handle, uint32_t channel, CAEN_DGTZ_TriggerPolarity_t* Polarity) = 0;
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_RearmInterrupt(int handle) = 0;
+
+
+	/*
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_SetDRS4SamplingFrequency(int handle, CAEN_DGTZ_DRS4Frequency_t frequency) = 0;
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_GetDRS4SamplingFrequency(int handle, CAEN_DGTZ_DRS4Frequency_t* frequency) = 0;
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_SetOutputSignalMode(int handle, CAEN_DGTZ_OutputSignalMode_t mode) = 0;
@@ -199,6 +201,8 @@ public:
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_SetSAMTriggerCountVetoParam(int handle, int channel, CAEN_DGTZ_EnaDis_t enable, uint32_t vetoWindow) = 0;
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_GetSAMTriggerCountVetoParam(int handle, int channel, CAEN_DGTZ_EnaDis_t* enable, uint32_t* vetoWindow) = 0;
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_GetSAMCorrectionData(int handle, void* STable) = 0;
+	*/
+
 
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_Calibrate(int handle) = 0;
 	virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_ReadTemperature(int handle, int32_t ch, uint32_t* temp) = 0;
@@ -247,10 +251,10 @@ public:
 			if (NULL != lpCAEN_DGTZ_OpenDigitizer)
 				return lpCAEN_DGTZ_OpenDigitizer(LinkType, LinkNum, ConetNode, VMEBaseAddress, handle);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
 	typedef CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_CloseDigitizer)(int);
 	LPCAEN_DGTZ_CloseDigitizer lpCAEN_DGTZ_CloseDigitizer = NULL;
@@ -268,15 +272,15 @@ public:
 			if (NULL != lpCAEN_DGTZ_CloseDigitizer)
 				return lpCAEN_DGTZ_CloseDigitizer(handle);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
 	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_WriteRegister)(int, uint32_t, uint32_t);
 	LPCAEN_DGTZ_WriteRegister lpCAEN_DGTZ_WriteRegister = NULL;
 	long isCAEN_DGTZ_WriteRegister = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_WriteRegister(int handle, uint32_t Address, uint32_t Data) 
+	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_WriteRegister(int handle, uint32_t Address, uint32_t Data)
 	{
 		if (hLinkdll)
 		{
@@ -287,12 +291,12 @@ public:
 				isCAEN_DGTZ_WriteRegister = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_WriteRegister)
-				return lpCAEN_DGTZ_WriteRegister(handle,Address,Data);
+				return lpCAEN_DGTZ_WriteRegister(handle, Address, Data);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
 	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_ReadRegister)(int, uint32_t, uint32_t*);
 	LPCAEN_DGTZ_ReadRegister lpCAEN_DGTZ_ReadRegister = NULL;
@@ -310,10 +314,10 @@ public:
 			if (NULL != lpCAEN_DGTZ_ReadRegister)
 				return lpCAEN_DGTZ_ReadRegister(handle, Address, Data);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
 	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetInfo)(int, CAEN_DGTZ_BoardInfo_t*);
 	LPCAEN_DGTZ_GetInfo lpCAEN_DGTZ_GetInfo = NULL;
@@ -331,10 +335,10 @@ public:
 			if (NULL != lpCAEN_DGTZ_GetInfo)
 				return lpCAEN_DGTZ_GetInfo(handle, BoardInfo);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
 	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_Reset)(int);
 	LPCAEN_DGTZ_Reset lpCAEN_DGTZ_Reset = NULL;
@@ -352,10 +356,10 @@ public:
 			if (NULL != lpCAEN_DGTZ_Reset)
 				return lpCAEN_DGTZ_Reset(handle);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
 	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_ClearData)(int);
 	LPCAEN_DGTZ_ClearData lpCAEN_DGTZ_ClearData = NULL;
@@ -373,10 +377,10 @@ public:
 			if (NULL != lpCAEN_DGTZ_ClearData)
 				return lpCAEN_DGTZ_ClearData(handle);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
 	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SendSWtrigger)(int);
 	LPCAEN_DGTZ_SendSWtrigger lpCAEN_DGTZ_SendSWtrigger = NULL;
@@ -394,15 +398,15 @@ public:
 			if (NULL != lpCAEN_DGTZ_SendSWtrigger)
 				return lpCAEN_DGTZ_SendSWtrigger(handle);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
 	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SWStartAcquisition)(int);
 	LPCAEN_DGTZ_SWStartAcquisition lpCAEN_DGTZ_SWStartAcquisition = NULL;
 	long isCAEN_DGTZ_SWStartAcquisition = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SWStartAcquisition(int handle)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SWStartAcquisition(int handle)
 	{
 		if (hLinkdll)
 		{
@@ -415,15 +419,15 @@ public:
 			if (NULL != lpCAEN_DGTZ_SWStartAcquisition)
 				return lpCAEN_DGTZ_SWStartAcquisition(handle);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SWStopAcquisition)(int);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SWStopAcquisition)(int);
 	LPCAEN_DGTZ_SWStopAcquisition lpCAEN_DGTZ_SWStopAcquisition = NULL;
 	long isCAEN_DGTZ_SWStopAcquisition = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SWStopAcquisition(int handle)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SWStopAcquisition(int handle)
 	{
 		if (hLinkdll)
 		{
@@ -436,15 +440,15 @@ public:
 			if (NULL != lpCAEN_DGTZ_SWStopAcquisition)
 				return lpCAEN_DGTZ_SWStopAcquisition(handle);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetInterruptConfig)(int, CAEN_DGTZ_EnaDis_t, uint8_t, uint32_t, uint16_t, CAEN_DGTZ_IRQMode_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetInterruptConfig)(int, CAEN_DGTZ_EnaDis_t, uint8_t, uint32_t, uint16_t, CAEN_DGTZ_IRQMode_t);
 	LPCAEN_DGTZ_SetInterruptConfig lpCAEN_DGTZ_SetInterruptConfig = NULL;
 	long isCAEN_DGTZ_SetInterruptConfig = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetInterruptConfig(int handle, CAEN_DGTZ_EnaDis_t state, uint8_t level, uint32_t status_id, uint16_t event_number, CAEN_DGTZ_IRQMode_t mode)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetInterruptConfig(int handle, CAEN_DGTZ_EnaDis_t state, uint8_t level, uint32_t status_id, uint16_t event_number, CAEN_DGTZ_IRQMode_t mode)
 	{
 		if (hLinkdll)
 		{
@@ -455,17 +459,17 @@ public:
 				isCAEN_DGTZ_SetInterruptConfig = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetInterruptConfig)
-				return lpCAEN_DGTZ_SetInterruptConfig(handle,state,level,status_id,event_number,mode);
+				return lpCAEN_DGTZ_SetInterruptConfig(handle, state, level, status_id, event_number, mode);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetInterruptConfig)(int, CAEN_DGTZ_EnaDis_t*, uint8_t*, uint32_t*, uint16_t*, CAEN_DGTZ_IRQMode_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetInterruptConfig)(int, CAEN_DGTZ_EnaDis_t*, uint8_t*, uint32_t*, uint16_t*, CAEN_DGTZ_IRQMode_t*);
 	LPCAEN_DGTZ_GetInterruptConfig lpCAEN_DGTZ_GetInterruptConfig = NULL;
 	long isCAEN_DGTZ_GetInterruptConfig = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetInterruptConfig(int handle, CAEN_DGTZ_EnaDis_t* state, uint8_t* level, uint32_t* status_id, uint16_t* event_number, CAEN_DGTZ_IRQMode_t* mode)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetInterruptConfig(int handle, CAEN_DGTZ_EnaDis_t* state, uint8_t* level, uint32_t* status_id, uint16_t* event_number, CAEN_DGTZ_IRQMode_t* mode)
 	{
 		if (hLinkdll)
 		{
@@ -478,36 +482,36 @@ public:
 			if (NULL != lpCAEN_DGTZ_GetInterruptConfig)
 				return lpCAEN_DGTZ_GetInterruptConfig(handle, state, level, status_id, event_number, mode);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_IRQWait)(int, uint32_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_IRQWait)(int, uint32_t);
 	LPCAEN_DGTZ_IRQWait lpCAEN_DGTZ_IRQWait = NULL;
 	long isCAEN_DGTZ_IRQWait = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_IRQWait(int handle, uint32_t timeout)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_IRQWait(int handle, uint32_t timeout)
 	{
 		if (hLinkdll)
 		{
 			if (FUNC_LOADED != isCAEN_DGTZ_IRQWait)
 			{
-				lpCAEN_DGTZ_IRQWait = NULL; CAEN_DGTZ_VMEIRQWait;
+				lpCAEN_DGTZ_IRQWait = NULL;
 				lpCAEN_DGTZ_IRQWait = (LPCAEN_DGTZ_IRQWait)GetProcAddress(hLinkdll, "CAEN_DGTZ_IRQWait");
 				isCAEN_DGTZ_IRQWait = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_IRQWait)
-				return lpCAEN_DGTZ_IRQWait(handle,timeout);
+				return lpCAEN_DGTZ_IRQWait(handle, timeout);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_VMEIRQWait)(CAEN_DGTZ_ConnectionType,int,int,uint8_t,uint32_t,int*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_VMEIRQWait)(CAEN_DGTZ_ConnectionType, int, int, uint8_t, uint32_t, int*);
 	LPCAEN_DGTZ_VMEIRQWait lpCAEN_DGTZ_VMEIRQWait = NULL;
 	long isCAEN_DGTZ_VMEIRQWait = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_VMEIRQWait(CAEN_DGTZ_ConnectionType LinkType, int LinkNum, int ConetNode, uint8_t IRQMask, uint32_t timeout, int* VMEHandle)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_VMEIRQWait(CAEN_DGTZ_ConnectionType LinkType, int LinkNum, int ConetNode, uint8_t IRQMask, uint32_t timeout, int* VMEHandle)
 	{
 		if (hLinkdll)
 		{
@@ -518,17 +522,17 @@ public:
 				isCAEN_DGTZ_VMEIRQWait = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_VMEIRQWait)
-				return lpCAEN_DGTZ_VMEIRQWait(LinkType,LinkNum,ConetNode,IRQMask,timeout,VMEHandle);
+				return lpCAEN_DGTZ_VMEIRQWait(LinkType, LinkNum, ConetNode, IRQMask, timeout, VMEHandle);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_VMEIRQCheck)(int,uint8_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_VMEIRQCheck)(int, uint8_t*);
 	LPCAEN_DGTZ_VMEIRQCheck lpCAEN_DGTZ_VMEIRQCheck = NULL;
 	long isCAEN_DGTZ_VMEIRQCheck = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_VMEIRQCheck(int VMEHandle, uint8_t* Mask)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_VMEIRQCheck(int VMEHandle, uint8_t* Mask)
 	{
 		if (hLinkdll)
 		{
@@ -539,17 +543,17 @@ public:
 				isCAEN_DGTZ_VMEIRQCheck = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_VMEIRQCheck)
-				return lpCAEN_DGTZ_VMEIRQCheck(VMEHandle,Mask);
+				return lpCAEN_DGTZ_VMEIRQCheck(VMEHandle, Mask);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_VMEIACKCycle)(int, uint8_t, int32_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_VMEIACKCycle)(int, uint8_t, int32_t*);
 	LPCAEN_DGTZ_VMEIACKCycle lpCAEN_DGTZ_VMEIACKCycle = NULL;
 	long isCAEN_DGTZ_VMEIACKCycle = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_VMEIACKCycle(int VMEHandle, uint8_t level, int32_t* board_id)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_VMEIACKCycle(int VMEHandle, uint8_t level, int32_t* board_id)
 	{
 		if (hLinkdll)
 		{
@@ -560,17 +564,17 @@ public:
 				isCAEN_DGTZ_VMEIACKCycle = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_VMEIACKCycle)
-				return lpCAEN_DGTZ_VMEIACKCycle(VMEHandle,level,board_id);
+				return lpCAEN_DGTZ_VMEIACKCycle(VMEHandle, level, board_id);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetDESMode)(int, CAEN_DGTZ_EnaDis_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetDESMode)(int, CAEN_DGTZ_EnaDis_t);
 	LPCAEN_DGTZ_SetDESMode lpCAEN_DGTZ_SetDESMode = NULL;
 	long isCAEN_DGTZ_SetDESMode = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetDESMode(int handle, CAEN_DGTZ_EnaDis_t enable)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetDESMode(int handle, CAEN_DGTZ_EnaDis_t enable)
 	{
 		if (hLinkdll)
 		{
@@ -581,17 +585,17 @@ public:
 				isCAEN_DGTZ_SetDESMode = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetDESMode)
-				return lpCAEN_DGTZ_SetDESMode(handle,enable);
+				return lpCAEN_DGTZ_SetDESMode(handle, enable);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetDESMode)(int, CAEN_DGTZ_EnaDis_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetDESMode)(int, CAEN_DGTZ_EnaDis_t*);
 	LPCAEN_DGTZ_GetDESMode lpCAEN_DGTZ_GetDESMode = NULL;
 	long isCAEN_DGTZ_GetDESMode = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetDESMode(int handle, CAEN_DGTZ_EnaDis_t* enable)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetDESMode(int handle, CAEN_DGTZ_EnaDis_t* enable)
 	{
 		if (hLinkdll)
 		{
@@ -602,17 +606,17 @@ public:
 				isCAEN_DGTZ_GetDESMode = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetDESMode)
-				return lpCAEN_DGTZ_GetDESMode(handle,enable);
+				return lpCAEN_DGTZ_GetDESMode(handle, enable);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetRecordLength)(int, uint32_t,int);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetRecordLength)(int, uint32_t, int);
 	LPCAEN_DGTZ_SetRecordLength lpCAEN_DGTZ_SetRecordLength = NULL;
 	long isCAEN_DGTZ_SetRecordLength = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetRecordLength(int handle, uint32_t size,int channel)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetRecordLength(int handle, uint32_t size, int channel)
 	{
 
 
@@ -626,17 +630,17 @@ public:
 			}
 			if (NULL != lpCAEN_DGTZ_SetRecordLength)
 
-				return lpCAEN_DGTZ_SetRecordLength(handle,size,channel);
+				return lpCAEN_DGTZ_SetRecordLength(handle, size, channel);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetRecordLength)(int,uint32_t*,int);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetRecordLength)(int, uint32_t*, int);
 	LPCAEN_DGTZ_GetRecordLength lpCAEN_DGTZ_GetRecordLength = NULL;
 	long isCAEN_DGTZ_GetRecordLength = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetRecordLength(int handle, uint32_t* size,int channel)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetRecordLength(int handle, uint32_t* size, int channel)
 	{
 		if (hLinkdll)
 		{
@@ -647,17 +651,17 @@ public:
 				isCAEN_DGTZ_GetRecordLength = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetRecordLength)
-				return lpCAEN_DGTZ_GetRecordLength(handle,size,channel);
+				return lpCAEN_DGTZ_GetRecordLength(handle, size, channel);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetChannelEnableMask)(int, uint32_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetChannelEnableMask)(int, uint32_t);
 	LPCAEN_DGTZ_SetChannelEnableMask lpCAEN_DGTZ_SetChannelEnableMask = NULL;
 	long isCAEN_DGTZ_SetChannelEnableMask = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetChannelEnableMask(int handle, uint32_t mask)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetChannelEnableMask(int handle, uint32_t mask)
 	{
 		if (hLinkdll)
 		{
@@ -668,17 +672,17 @@ public:
 				isCAEN_DGTZ_SetChannelEnableMask = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetChannelEnableMask)
-				return lpCAEN_DGTZ_SetChannelEnableMask(handle,mask);
+				return lpCAEN_DGTZ_SetChannelEnableMask(handle, mask);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetChannelEnableMask)(int,uint32_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetChannelEnableMask)(int, uint32_t*);
 	LPCAEN_DGTZ_GetChannelEnableMask lpCAEN_DGTZ_GetChannelEnableMask = NULL;
 	long isCAEN_DGTZ_GetChannelEnableMask = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetChannelEnableMask(int handle, uint32_t* mask)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetChannelEnableMask(int handle, uint32_t* mask)
 	{
 		if (hLinkdll)
 		{
@@ -689,17 +693,17 @@ public:
 				isCAEN_DGTZ_GetChannelEnableMask = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetChannelEnableMask)
-				return lpCAEN_DGTZ_GetChannelEnableMask(handle,mask);
+				return lpCAEN_DGTZ_GetChannelEnableMask(handle, mask);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetGroupEnableMask)(int,uint32_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetGroupEnableMask)(int, uint32_t);
 	LPCAEN_DGTZ_SetGroupEnableMask lpCAEN_DGTZ_SetGroupEnableMask = NULL;
 	long isCAEN_DGTZ_SetGroupEnableMask = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetGroupEnableMask(int handle, uint32_t mask)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetGroupEnableMask(int handle, uint32_t mask)
 	{
 		if (hLinkdll)
 		{
@@ -710,17 +714,17 @@ public:
 				isCAEN_DGTZ_SetGroupEnableMask = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetGroupEnableMask)
-				return lpCAEN_DGTZ_SetGroupEnableMask(handle,mask);
+				return lpCAEN_DGTZ_SetGroupEnableMask(handle, mask);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetGroupEnableMask)(int,uint32_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetGroupEnableMask)(int, uint32_t*);
 	LPCAEN_DGTZ_GetGroupEnableMask lpCAEN_DGTZ_GetGroupEnableMask = NULL;
 	long isCAEN_DGTZ_GetGroupEnableMask = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetGroupEnableMask(int handle, uint32_t* mask)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetGroupEnableMask(int handle, uint32_t* mask)
 	{
 		if (hLinkdll)
 		{
@@ -731,17 +735,17 @@ public:
 				isCAEN_DGTZ_GetGroupEnableMask = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetGroupEnableMask)
-				return lpCAEN_DGTZ_GetGroupEnableMask(handle,mask);
+				return lpCAEN_DGTZ_GetGroupEnableMask(handle, mask);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetSWTriggerMode)(int, CAEN_DGTZ_TriggerMode_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetSWTriggerMode)(int, CAEN_DGTZ_TriggerMode_t);
 	LPCAEN_DGTZ_SetSWTriggerMode lpCAEN_DGTZ_SetSWTriggerMode = NULL;
 	long isCAEN_DGTZ_SetSWTriggerMode = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetSWTriggerMode(int handle, CAEN_DGTZ_TriggerMode_t mode)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetSWTriggerMode(int handle, CAEN_DGTZ_TriggerMode_t mode)
 	{
 		if (hLinkdll)
 		{
@@ -752,17 +756,17 @@ public:
 				isCAEN_DGTZ_SetSWTriggerMode = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetSWTriggerMode)
-				return lpCAEN_DGTZ_SetSWTriggerMode(handle,mode);
+				return lpCAEN_DGTZ_SetSWTriggerMode(handle, mode);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetExtTriggerInputMode)(int, CAEN_DGTZ_TriggerMode_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetExtTriggerInputMode)(int, CAEN_DGTZ_TriggerMode_t);
 	LPCAEN_DGTZ_SetExtTriggerInputMode lpCAEN_DGTZ_SetExtTriggerInputMode = NULL;
 	long isCAEN_DGTZ_SetExtTriggerInputMode = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetExtTriggerInputMode(int handle, CAEN_DGTZ_TriggerMode_t mode)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetExtTriggerInputMode(int handle, CAEN_DGTZ_TriggerMode_t mode)
 	{
 		if (hLinkdll)
 		{
@@ -773,17 +777,17 @@ public:
 				isCAEN_DGTZ_SetExtTriggerInputMode = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetExtTriggerInputMode)
-				return lpCAEN_DGTZ_SetExtTriggerInputMode(handle,mode);
+				return lpCAEN_DGTZ_SetExtTriggerInputMode(handle, mode);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetExtTriggerInputMode)(int, CAEN_DGTZ_TriggerMode_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetExtTriggerInputMode)(int, CAEN_DGTZ_TriggerMode_t*);
 	LPCAEN_DGTZ_GetExtTriggerInputMode lpCAEN_DGTZ_GetExtTriggerInputMode = NULL;
 	long isCAEN_DGTZ_GetExtTriggerInputMode = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetExtTriggerInputMode(int handle, CAEN_DGTZ_TriggerMode_t* mode)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetExtTriggerInputMode(int handle, CAEN_DGTZ_TriggerMode_t* mode)
 	{
 		if (hLinkdll)
 		{
@@ -794,17 +798,17 @@ public:
 				isCAEN_DGTZ_GetExtTriggerInputMode = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetExtTriggerInputMode)
-				return lpCAEN_DGTZ_GetExtTriggerInputMode(handle,mode);
+				return lpCAEN_DGTZ_GetExtTriggerInputMode(handle, mode);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetSWTriggerMode)(int, CAEN_DGTZ_TriggerMode_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetSWTriggerMode)(int, CAEN_DGTZ_TriggerMode_t*);
 	LPCAEN_DGTZ_GetSWTriggerMode lpCAEN_DGTZ_GetSWTriggerMode = NULL;
 	long isCAEN_DGTZ_GetSWTriggerMode = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetSWTriggerMode(int handle, CAEN_DGTZ_TriggerMode_t*mode)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetSWTriggerMode(int handle, CAEN_DGTZ_TriggerMode_t* mode)
 	{
 		if (hLinkdll)
 		{
@@ -815,17 +819,17 @@ public:
 				isCAEN_DGTZ_GetSWTriggerMode = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetSWTriggerMode)
-				return lpCAEN_DGTZ_GetSWTriggerMode(handle,mode);
+				return lpCAEN_DGTZ_GetSWTriggerMode(handle, mode);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetChannelSelfTrigger)(int, CAEN_DGTZ_TriggerMode_t, uint32_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetChannelSelfTrigger)(int, CAEN_DGTZ_TriggerMode_t, uint32_t);
 	LPCAEN_DGTZ_SetChannelSelfTrigger lpCAEN_DGTZ_SetChannelSelfTrigger = NULL;
 	long isCAEN_DGTZ_SetChannelSelfTrigger = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetChannelSelfTrigger(int handle, CAEN_DGTZ_TriggerMode_t mode, uint32_t channelmask)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetChannelSelfTrigger(int handle, CAEN_DGTZ_TriggerMode_t mode, uint32_t channelmask)
 	{
 		if (hLinkdll)
 		{
@@ -836,17 +840,39 @@ public:
 				isCAEN_DGTZ_SetChannelSelfTrigger = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetChannelSelfTrigger)
-				return lpCAEN_DGTZ_SetChannelSelfTrigger(handle,mode,channelmask);
+				return lpCAEN_DGTZ_SetChannelSelfTrigger(handle, mode, channelmask);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetGroupSelfTrigger)(int, CAEN_DGTZ_TriggerMode_t, uint32_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetChannelSelfTrigger)(int, uint32_t, CAEN_DGTZ_TriggerMode_t*);
+	LPCAEN_DGTZ_GetChannelSelfTrigger lpCAEN_DGTZ_GetChannelSelfTrigger = NULL;
+	long isCAEN_DGTZ_GetChannelSelfTrigger = 0;
+	CAEN_DGTZ_ErrorCode CAEN_DGTZ_GetChannelSelfTrigger(int handle, uint32_t channel, CAEN_DGTZ_TriggerMode_t* mode)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_GetChannelSelfTrigger)
+			{
+				lpCAEN_DGTZ_GetChannelSelfTrigger = NULL;
+				lpCAEN_DGTZ_GetChannelSelfTrigger = (LPCAEN_DGTZ_GetChannelSelfTrigger)GetProcAddress(hLinkdll, "CAEN_DGTZ_GetChannelSelfTrigger");
+				isCAEN_DGTZ_GetChannelSelfTrigger = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_GetChannelSelfTrigger)
+				return lpCAEN_DGTZ_GetChannelSelfTrigger(handle, channel, mode);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetGroupSelfTrigger)(int, CAEN_DGTZ_TriggerMode_t, uint32_t);
 	LPCAEN_DGTZ_SetGroupSelfTrigger lpCAEN_DGTZ_SetGroupSelfTrigger = NULL;
 	long isCAEN_DGTZ_SetGroupSelfTrigger = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetGroupSelfTrigger(int handle, CAEN_DGTZ_TriggerMode_t mode, uint32_t groupmask)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetGroupSelfTrigger(int handle, CAEN_DGTZ_TriggerMode_t mode, uint32_t groupmask)
 	{
 		if (hLinkdll)
 		{
@@ -857,17 +883,39 @@ public:
 				isCAEN_DGTZ_SetGroupSelfTrigger = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetGroupSelfTrigger)
-				return lpCAEN_DGTZ_SetGroupSelfTrigger(handle,mode,groupmask);
+				return lpCAEN_DGTZ_SetGroupSelfTrigger(handle, mode, groupmask);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetChannelGroupMask)(int, uint32_t, uint32_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetGroupSelfTrigger)(int, uint32_t, CAEN_DGTZ_TriggerMode_t*);
+	LPCAEN_DGTZ_GetGroupSelfTrigger lpCAEN_DGTZ_GetGroupSelfTrigger = NULL;
+	long isCAEN_DGTZ_GetGroupSelfTrigger = 0;
+	CAEN_DGTZ_ErrorCode CAEN_DGTZ_GetGroupSelfTrigger(int handle, uint32_t group, CAEN_DGTZ_TriggerMode_t* mode)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_GetGroupSelfTrigger)
+			{
+				lpCAEN_DGTZ_GetGroupSelfTrigger = NULL;
+				lpCAEN_DGTZ_GetGroupSelfTrigger = (LPCAEN_DGTZ_GetGroupSelfTrigger)GetProcAddress(hLinkdll, "CAEN_DGTZ_GetGroupSelfTrigger");
+				isCAEN_DGTZ_GetGroupSelfTrigger = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_GetGroupSelfTrigger)
+				return lpCAEN_DGTZ_GetGroupSelfTrigger(handle, group, mode);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetChannelGroupMask)(int, uint32_t, uint32_t);
 	LPCAEN_DGTZ_SetChannelGroupMask lpCAEN_DGTZ_SetChannelGroupMask = NULL;
 	long isCAEN_DGTZ_SetChannelGroupMask = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetChannelGroupMask(int handle, uint32_t group, uint32_t channelmask)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetChannelGroupMask(int handle, uint32_t group, uint32_t channelmask)
 	{
 		if (hLinkdll)
 		{
@@ -878,17 +926,17 @@ public:
 				isCAEN_DGTZ_SetChannelGroupMask = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetChannelGroupMask)
-				return lpCAEN_DGTZ_SetChannelGroupMask(handle,group,channelmask);
+				return lpCAEN_DGTZ_SetChannelGroupMask(handle, group, channelmask);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetChannelGroupMask)(int, uint32_t, uint32_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetChannelGroupMask)(int, uint32_t, uint32_t*);
 	LPCAEN_DGTZ_GetChannelGroupMask lpCAEN_DGTZ_GetChannelGroupMask = NULL;
 	long isCAEN_DGTZ_GetChannelGroupMask = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetChannelGroupMask(int handle, uint32_t group, uint32_t* channelmask)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetChannelGroupMask(int handle, uint32_t group, uint32_t* channelmask)
 	{
 		if (hLinkdll)
 		{
@@ -899,17 +947,17 @@ public:
 				isCAEN_DGTZ_GetChannelGroupMask = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetChannelGroupMask)
-				return lpCAEN_DGTZ_GetChannelGroupMask(handle,group,channelmask);
+				return lpCAEN_DGTZ_GetChannelGroupMask(handle, group, channelmask);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetPostTriggerSize)(int, uint32_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetPostTriggerSize)(int, uint32_t);
 	LPCAEN_DGTZ_SetPostTriggerSize lpCAEN_DGTZ_SetPostTriggerSize = NULL;
 	long isCAEN_DGTZ_SetPostTriggerSize = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetPostTriggerSize(int handle, uint32_t percent)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetPostTriggerSize(int handle, uint32_t percent)
 	{
 		if (hLinkdll)
 		{
@@ -920,17 +968,39 @@ public:
 				isCAEN_DGTZ_SetPostTriggerSize = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetPostTriggerSize)
-				return lpCAEN_DGTZ_SetPostTriggerSize(handle,percent);
+				return lpCAEN_DGTZ_SetPostTriggerSize(handle, percent);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetDPPPreTriggerSize)(int, int, uint32_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetPostTriggerSize)(int, uint32_t*);
+	LPCAEN_DGTZ_GetPostTriggerSize lpCAEN_DGTZ_GetPostTriggerSize = NULL;
+	long isCAEN_DGTZ_GetPostTriggerSize = 0;
+	CAEN_DGTZ_ErrorCode CAEN_DGTZ_GetPostTriggerSize(int handle, uint32_t* percent)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_GetPostTriggerSize)
+			{
+				lpCAEN_DGTZ_GetPostTriggerSize = NULL;
+				lpCAEN_DGTZ_GetPostTriggerSize = (LPCAEN_DGTZ_GetPostTriggerSize)GetProcAddress(hLinkdll, "CAEN_DGTZ_GetPostTriggerSize");
+				isCAEN_DGTZ_GetPostTriggerSize = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_GetPostTriggerSize)
+				return lpCAEN_DGTZ_GetPostTriggerSize(handle, percent);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetDPPPreTriggerSize)(int, int, uint32_t);
 	LPCAEN_DGTZ_SetDPPPreTriggerSize lpCAEN_DGTZ_SetDPPPreTriggerSize = NULL;
 	long isCAEN_DGTZ_SetDPPPreTriggerSize = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetDPPPreTriggerSize(int handle, int ch, uint32_t samples)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetDPPPreTriggerSize(int handle, int ch, uint32_t samples)
 	{
 		if (hLinkdll)
 		{
@@ -941,17 +1011,17 @@ public:
 				isCAEN_DGTZ_SetDPPPreTriggerSize = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetDPPPreTriggerSize)
-				return lpCAEN_DGTZ_SetDPPPreTriggerSize(handle,ch,samples);
+				return lpCAEN_DGTZ_SetDPPPreTriggerSize(handle, ch, samples);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetDPPPreTriggerSize)(int,int,uint32_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetDPPPreTriggerSize)(int, int, uint32_t*);
 	LPCAEN_DGTZ_GetDPPPreTriggerSize lpCAEN_DGTZ_GetDPPPreTriggerSize = NULL;
 	long isCAEN_DGTZ_GetDPPPreTriggerSize = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetDPPPreTriggerSize(int handle, int ch, uint32_t* samples)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetDPPPreTriggerSize(int handle, int ch, uint32_t* samples)
 	{
 		if (hLinkdll)
 		{
@@ -962,17 +1032,17 @@ public:
 				isCAEN_DGTZ_GetDPPPreTriggerSize = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetDPPPreTriggerSize)
-				return lpCAEN_DGTZ_GetDPPPreTriggerSize(handle,ch,samples);
+				return lpCAEN_DGTZ_GetDPPPreTriggerSize(handle, ch, samples);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetChannelDCOffset)(int, uint32_t, uint32_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetChannelDCOffset)(int, uint32_t, uint32_t);
 	LPCAEN_DGTZ_SetChannelDCOffset lpCAEN_DGTZ_SetChannelDCOffset = NULL;
 	long isCAEN_DGTZ_SetChannelDCOffset = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetChannelDCOffset(int handle, uint32_t channel, uint32_t Tvalue)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetChannelDCOffset(int handle, uint32_t channel, uint32_t Tvalue)
 	{
 		if (hLinkdll)
 		{
@@ -983,17 +1053,39 @@ public:
 				isCAEN_DGTZ_SetChannelDCOffset = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetChannelDCOffset)
-				return lpCAEN_DGTZ_SetChannelDCOffset(handle,channel,Tvalue);
+				return lpCAEN_DGTZ_SetChannelDCOffset(handle, channel, Tvalue);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetGroupDCOffset)(int, uint32_t, uint32_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetChannelDCOffset)(int, uint32_t, uint32_t*);
+	LPCAEN_DGTZ_GetChannelDCOffset lpCAEN_DGTZ_GetChannelDCOffset = NULL;
+	long isCAEN_DGTZ_GetChannelDCOffset = 0;
+	CAEN_DGTZ_ErrorCode CAEN_DGTZ_GetChannelDCOffset(int handle, uint32_t channel, uint32_t* Tvalue)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_GetChannelDCOffset)
+			{
+				lpCAEN_DGTZ_GetChannelDCOffset = NULL;
+				lpCAEN_DGTZ_GetChannelDCOffset = (LPCAEN_DGTZ_GetChannelDCOffset)GetProcAddress(hLinkdll, "CAEN_DGTZ_GetChannelDCOffset");
+				isCAEN_DGTZ_GetChannelDCOffset = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_GetChannelDCOffset)
+				return lpCAEN_DGTZ_GetChannelDCOffset(handle, channel, Tvalue);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetGroupDCOffset)(int, uint32_t, uint32_t);
 	LPCAEN_DGTZ_SetGroupDCOffset lpCAEN_DGTZ_SetGroupDCOffset = NULL;
 	long isCAEN_DGTZ_SetGroupDCOffset = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetGroupDCOffset(int handle, uint32_t group, uint32_t Tvalue)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetGroupDCOffset(int handle, uint32_t group, uint32_t Tvalue)
 	{
 		if (hLinkdll)
 		{
@@ -1004,17 +1096,17 @@ public:
 				isCAEN_DGTZ_SetGroupDCOffset = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetGroupDCOffset)
-				return lpCAEN_DGTZ_SetGroupDCOffset(handle,group,Tvalue);
+				return lpCAEN_DGTZ_SetGroupDCOffset(handle, group, Tvalue);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetGroupDCOffset)(int, uint32_t, uint32_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetGroupDCOffset)(int, uint32_t, uint32_t*);
 	LPCAEN_DGTZ_GetGroupDCOffset lpCAEN_DGTZ_GetGroupDCOffset = NULL;
 	long isCAEN_DGTZ_GetGroupDCOffset = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetGroupDCOffset(int handle, uint32_t group, uint32_t* Tvalue)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetGroupDCOffset(int handle, uint32_t group, uint32_t* Tvalue)
 	{
 		if (hLinkdll)
 		{
@@ -1025,17 +1117,17 @@ public:
 				isCAEN_DGTZ_GetGroupDCOffset = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetGroupDCOffset)
-				return lpCAEN_DGTZ_GetGroupDCOffset(handle,group,Tvalue);
+				return lpCAEN_DGTZ_GetGroupDCOffset(handle, group, Tvalue);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetChannelTriggerThreshold)(int, uint32_t, uint32_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetChannelTriggerThreshold)(int, uint32_t, uint32_t);
 	LPCAEN_DGTZ_SetChannelTriggerThreshold lpCAEN_DGTZ_SetChannelTriggerThreshold = NULL;
 	long isCAEN_DGTZ_SetChannelTriggerThreshold = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetChannelTriggerThreshold(int handle, uint32_t channel, uint32_t Tvalue)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetChannelTriggerThreshold(int handle, uint32_t channel, uint32_t Tvalue)
 	{
 		if (hLinkdll)
 		{
@@ -1046,17 +1138,17 @@ public:
 				isCAEN_DGTZ_SetChannelTriggerThreshold = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetChannelTriggerThreshold)
-				return lpCAEN_DGTZ_SetChannelTriggerThreshold(handle,channel,Tvalue);
+				return lpCAEN_DGTZ_SetChannelTriggerThreshold(handle, channel, Tvalue);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetChannelTriggerThreshold)(int, uint32_t, uint32_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetChannelTriggerThreshold)(int, uint32_t, uint32_t*);
 	LPCAEN_DGTZ_GetChannelTriggerThreshold lpCAEN_DGTZ_GetChannelTriggerThreshold = NULL;
 	long isCAEN_DGTZ_GetChannelTriggerThreshold = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetChannelTriggerThreshold(int handle, uint32_t channel, uint32_t* Tvalue)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetChannelTriggerThreshold(int handle, uint32_t channel, uint32_t* Tvalue)
 	{
 		if (hLinkdll)
 		{
@@ -1067,17 +1159,17 @@ public:
 				isCAEN_DGTZ_GetChannelTriggerThreshold = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetChannelTriggerThreshold)
-				return lpCAEN_DGTZ_GetChannelTriggerThreshold(handle,channel,Tvalue);
+				return lpCAEN_DGTZ_GetChannelTriggerThreshold(handle, channel, Tvalue);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetChannelPulsePolarity)(int, uint32_t, CAEN_DGTZ_PulsePolarity_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetChannelPulsePolarity)(int, uint32_t, CAEN_DGTZ_PulsePolarity_t);
 	LPCAEN_DGTZ_SetChannelPulsePolarity lpCAEN_DGTZ_SetChannelPulsePolarity = NULL;
 	long isCAEN_DGTZ_SetChannelPulsePolarity = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetChannelPulsePolarity(int handle, uint32_t channel, CAEN_DGTZ_PulsePolarity_t pol)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetChannelPulsePolarity(int handle, uint32_t channel, CAEN_DGTZ_PulsePolarity_t pol)
 	{
 		if (hLinkdll)
 		{
@@ -1088,17 +1180,39 @@ public:
 				isCAEN_DGTZ_SetChannelPulsePolarity = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetChannelPulsePolarity)
-				return lpCAEN_DGTZ_SetChannelPulsePolarity(handle,channel,pol);
+				return lpCAEN_DGTZ_SetChannelPulsePolarity(handle, channel, pol);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetGroupTriggerThreshold)(int, uint32_t, uint32_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetChannelPulsePolarity)(int, uint32_t, CAEN_DGTZ_PulsePolarity_t*);
+	LPCAEN_DGTZ_GetChannelPulsePolarity lpCAEN_DGTZ_GetChannelPulsePolarity = NULL;
+	long isCAEN_DGTZ_GetChannelPulsePolarity = 0;
+	CAEN_DGTZ_ErrorCode CAEN_DGTZ_GetChannelPulsePolarity(int handle, uint32_t channel, CAEN_DGTZ_PulsePolarity_t* pol)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_GetChannelPulsePolarity)
+			{
+				lpCAEN_DGTZ_GetChannelPulsePolarity = NULL;
+				lpCAEN_DGTZ_GetChannelPulsePolarity = (LPCAEN_DGTZ_GetChannelPulsePolarity)GetProcAddress(hLinkdll, "CAEN_DGTZ_GetChannelPulsePolarity");
+				isCAEN_DGTZ_GetChannelPulsePolarity = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_GetChannelPulsePolarity)
+				return lpCAEN_DGTZ_GetChannelPulsePolarity(handle, channel, pol);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetGroupTriggerThreshold)(int, uint32_t, uint32_t);
 	LPCAEN_DGTZ_SetGroupTriggerThreshold lpCAEN_DGTZ_SetGroupTriggerThreshold = NULL;
 	long isCAEN_DGTZ_SetGroupTriggerThreshold = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetGroupTriggerThreshold(int handle, uint32_t group, uint32_t Tvalue)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetGroupTriggerThreshold(int handle, uint32_t group, uint32_t Tvalue)
 	{
 		if (hLinkdll)
 		{
@@ -1109,17 +1223,17 @@ public:
 				isCAEN_DGTZ_SetGroupTriggerThreshold = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetGroupTriggerThreshold)
-				return lpCAEN_DGTZ_SetGroupTriggerThreshold(handle,group,Tvalue);
+				return lpCAEN_DGTZ_SetGroupTriggerThreshold(handle, group, Tvalue);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetGroupTriggerThreshold)(int, uint32_t, uint32_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetGroupTriggerThreshold)(int, uint32_t, uint32_t*);
 	LPCAEN_DGTZ_GetGroupTriggerThreshold lpCAEN_DGTZ_GetGroupTriggerThreshold = NULL;
 	long isCAEN_DGTZ_GetGroupTriggerThreshold = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetGroupTriggerThreshold(int handle, uint32_t group, uint32_t* Tvalue)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetGroupTriggerThreshold(int handle, uint32_t group, uint32_t* Tvalue)
 	{
 		if (hLinkdll)
 		{
@@ -1130,17 +1244,17 @@ public:
 				isCAEN_DGTZ_GetGroupTriggerThreshold = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetGroupTriggerThreshold)
-				return lpCAEN_DGTZ_GetGroupTriggerThreshold(handle,group,Tvalue);
+				return lpCAEN_DGTZ_GetGroupTriggerThreshold(handle, group, Tvalue);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetZeroSuppressionMode)(int, CAEN_DGTZ_ZS_Mode_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetZeroSuppressionMode)(int, CAEN_DGTZ_ZS_Mode_t);
 	LPCAEN_DGTZ_SetZeroSuppressionMode lpCAEN_DGTZ_SetZeroSuppressionMode = NULL;
 	long isCAEN_DGTZ_SetZeroSuppressionMode = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetZeroSuppressionMode(int handle, CAEN_DGTZ_ZS_Mode_t mode)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetZeroSuppressionMode(int handle, CAEN_DGTZ_ZS_Mode_t mode)
 	{
 		if (hLinkdll)
 		{
@@ -1151,17 +1265,17 @@ public:
 				isCAEN_DGTZ_SetZeroSuppressionMode = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetZeroSuppressionMode)
-				return lpCAEN_DGTZ_SetZeroSuppressionMode(handle,mode);
+				return lpCAEN_DGTZ_SetZeroSuppressionMode(handle, mode);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetZeroSuppressionMode)(int, CAEN_DGTZ_ZS_Mode_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetZeroSuppressionMode)(int, CAEN_DGTZ_ZS_Mode_t*);
 	LPCAEN_DGTZ_GetZeroSuppressionMode lpCAEN_DGTZ_GetZeroSuppressionMode = NULL;
 	long isCAEN_DGTZ_GetZeroSuppressionMode = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetZeroSuppressionMode(int handle, CAEN_DGTZ_ZS_Mode_t* mode)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetZeroSuppressionMode(int handle, CAEN_DGTZ_ZS_Mode_t* mode)
 	{
 		if (hLinkdll)
 		{
@@ -1172,17 +1286,17 @@ public:
 				isCAEN_DGTZ_GetZeroSuppressionMode = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetZeroSuppressionMode)
-				return lpCAEN_DGTZ_GetZeroSuppressionMode(handle,mode);
+				return lpCAEN_DGTZ_GetZeroSuppressionMode(handle, mode);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetChannelZSParams)(int, uint32_t, CAEN_DGTZ_ThresholdWeight_t, int32_t, int32_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetChannelZSParams)(int, uint32_t, CAEN_DGTZ_ThresholdWeight_t, int32_t, int32_t);
 	LPCAEN_DGTZ_SetChannelZSParams lpCAEN_DGTZ_SetChannelZSParams = NULL;
 	long isCAEN_DGTZ_SetChannelZSParams = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetChannelZSParams(int handle, uint32_t channel, CAEN_DGTZ_ThresholdWeight_t weight, int32_t  threshold, int32_t nsamp)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetChannelZSParams(int handle, uint32_t channel, CAEN_DGTZ_ThresholdWeight_t weight, int32_t  threshold, int32_t nsamp)
 	{
 		if (hLinkdll)
 		{
@@ -1193,17 +1307,17 @@ public:
 				isCAEN_DGTZ_SetChannelZSParams = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetChannelZSParams)
-				return lpCAEN_DGTZ_SetChannelZSParams(handle,channel,weight,threshold,nsamp);
+				return lpCAEN_DGTZ_SetChannelZSParams(handle, channel, weight, threshold, nsamp);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetChannelZSParams)(int, uint32_t, CAEN_DGTZ_ThresholdWeight_t*, int32_t*, int32_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetChannelZSParams)(int, uint32_t, CAEN_DGTZ_ThresholdWeight_t*, int32_t*, int32_t*);
 	LPCAEN_DGTZ_GetChannelZSParams lpCAEN_DGTZ_GetChannelZSParams = NULL;
 	long isCAEN_DGTZ_GetChannelZSParams = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetChannelZSParams(int handle, uint32_t channel, CAEN_DGTZ_ThresholdWeight_t* weight, int32_t* threshold, int32_t* nsamp)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetChannelZSParams(int handle, uint32_t channel, CAEN_DGTZ_ThresholdWeight_t* weight, int32_t* threshold, int32_t* nsamp)
 	{
 		if (hLinkdll)
 		{
@@ -1214,17 +1328,17 @@ public:
 				isCAEN_DGTZ_GetChannelZSParams = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetChannelZSParams)
-				return lpCAEN_DGTZ_GetChannelZSParams(handle,channel,weight,threshold,nsamp);
+				return lpCAEN_DGTZ_GetChannelZSParams(handle, channel, weight, threshold, nsamp);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetAcquisitionMode)(int, CAEN_DGTZ_AcqMode_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetAcquisitionMode)(int, CAEN_DGTZ_AcqMode_t);
 	LPCAEN_DGTZ_SetAcquisitionMode lpCAEN_DGTZ_SetAcquisitionMode = NULL;
 	long isCAEN_DGTZ_SetAcquisitionMode = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetAcquisitionMode(int handle, CAEN_DGTZ_AcqMode_t mode)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetAcquisitionMode(int handle, CAEN_DGTZ_AcqMode_t mode)
 	{
 		if (hLinkdll)
 		{
@@ -1235,17 +1349,17 @@ public:
 				isCAEN_DGTZ_SetAcquisitionMode = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetAcquisitionMode)
-				return lpCAEN_DGTZ_SetAcquisitionMode(handle,mode);
+				return lpCAEN_DGTZ_SetAcquisitionMode(handle, mode);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetAcquisitionMode)(int, CAEN_DGTZ_AcqMode_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetAcquisitionMode)(int, CAEN_DGTZ_AcqMode_t*);
 	LPCAEN_DGTZ_GetAcquisitionMode lpCAEN_DGTZ_GetAcquisitionMode = NULL;
 	long isCAEN_DGTZ_GetAcquisitionMode = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetAcquisitionMode(int handle, CAEN_DGTZ_AcqMode_t* mode)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetAcquisitionMode(int handle, CAEN_DGTZ_AcqMode_t* mode)
 	{
 		if (hLinkdll)
 		{
@@ -1256,17 +1370,17 @@ public:
 				isCAEN_DGTZ_GetAcquisitionMode = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetAcquisitionMode)
-				return lpCAEN_DGTZ_GetAcquisitionMode(handle,mode);
+				return lpCAEN_DGTZ_GetAcquisitionMode(handle, mode);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetRunSynchronizationMode)(int, CAEN_DGTZ_RunSyncMode_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetRunSynchronizationMode)(int, CAEN_DGTZ_RunSyncMode_t);
 	LPCAEN_DGTZ_SetRunSynchronizationMode lpCAEN_DGTZ_SetRunSynchronizationMode = NULL;
 	long isCAEN_DGTZ_SetRunSynchronizationMode = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetRunSynchronizationMode(int handle, CAEN_DGTZ_RunSyncMode_t mode)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetRunSynchronizationMode(int handle, CAEN_DGTZ_RunSyncMode_t mode)
 	{
 		if (hLinkdll)
 		{
@@ -1277,17 +1391,17 @@ public:
 				isCAEN_DGTZ_SetRunSynchronizationMode = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetRunSynchronizationMode)
-				return lpCAEN_DGTZ_SetRunSynchronizationMode(handle,mode);
+				return lpCAEN_DGTZ_SetRunSynchronizationMode(handle, mode);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetRunSynchronizationMode)(int, CAEN_DGTZ_RunSyncMode_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetRunSynchronizationMode)(int, CAEN_DGTZ_RunSyncMode_t*);
 	LPCAEN_DGTZ_GetRunSynchronizationMode lpCAEN_DGTZ_GetRunSynchronizationMode = NULL;
 	long isCAEN_DGTZ_GetRunSynchronizationMode = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetRunSynchronizationMode(int handle, CAEN_DGTZ_RunSyncMode_t* mode)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetRunSynchronizationMode(int handle, CAEN_DGTZ_RunSyncMode_t* mode)
 	{
 		if (hLinkdll)
 		{
@@ -1298,17 +1412,40 @@ public:
 				isCAEN_DGTZ_GetRunSynchronizationMode = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetRunSynchronizationMode)
-				return lpCAEN_DGTZ_GetRunSynchronizationMode(handle,mode);
+				return lpCAEN_DGTZ_GetRunSynchronizationMode(handle, mode);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetAnalogMonOutput)(int, CAEN_DGTZ_AnalogMonitorOutputMode_t*);
+
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetAnalogMonOutput)(int, CAEN_DGTZ_AnalogMonitorOutputMode_t);
+	LPCAEN_DGTZ_SetAnalogMonOutput lpCAEN_DGTZ_SetAnalogMonOutput = NULL;
+	long isCAEN_DGTZ_SetAnalogMonOutput = 0;
+	CAEN_DGTZ_ErrorCode CAEN_DGTZ_SetAnalogMonOutput(int handle, CAEN_DGTZ_AnalogMonitorOutputMode_t mode)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_GetAnalogMonOutput)
+			{
+				lpCAEN_DGTZ_SetAnalogMonOutput = NULL;
+				lpCAEN_DGTZ_SetAnalogMonOutput = (LPCAEN_DGTZ_SetAnalogMonOutput)GetProcAddress(hLinkdll, "CAEN_DGTZ_SetAnalogMonOutput");
+				isCAEN_DGTZ_SetAnalogMonOutput = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_SetAnalogMonOutput)
+				return lpCAEN_DGTZ_SetAnalogMonOutput(handle, mode);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetAnalogMonOutput)(int, CAEN_DGTZ_AnalogMonitorOutputMode_t*);
 	LPCAEN_DGTZ_GetAnalogMonOutput lpCAEN_DGTZ_GetAnalogMonOutput = NULL;
 	long isCAEN_DGTZ_GetAnalogMonOutput = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetAnalogMonOutput(int handle, CAEN_DGTZ_AnalogMonitorOutputMode_t* mode)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetAnalogMonOutput(int handle, CAEN_DGTZ_AnalogMonitorOutputMode_t* mode)
 	{
 		if (hLinkdll)
 		{
@@ -1319,17 +1456,17 @@ public:
 				isCAEN_DGTZ_GetAnalogMonOutput = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetAnalogMonOutput)
-				return lpCAEN_DGTZ_GetAnalogMonOutput(handle,mode);
+				return lpCAEN_DGTZ_GetAnalogMonOutput(handle, mode);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (CAEN_DGTZ_ErrorCode::ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetAnalogInspectionMonParams)(int, uint32_t, uint32_t, CAEN_DGTZ_AnalogMonitorMagnify_t, CAEN_DGTZ_AnalogMonitorInspectorInverter_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetAnalogInspectionMonParams)(int, uint32_t, uint32_t, CAEN_DGTZ_AnalogMonitorMagnify_t, CAEN_DGTZ_AnalogMonitorInspectorInverter_t);
 	LPCAEN_DGTZ_SetAnalogInspectionMonParams lpCAEN_DGTZ_SetAnalogInspectionMonParams = NULL;
 	long isCAEN_DGTZ_SetAnalogInspectionMonParams = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetAnalogInspectionMonParams(int handle, uint32_t channelmask, uint32_t offset, CAEN_DGTZ_AnalogMonitorMagnify_t mf, CAEN_DGTZ_AnalogMonitorInspectorInverter_t ami)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetAnalogInspectionMonParams(int handle, uint32_t channelmask, uint32_t offset, CAEN_DGTZ_AnalogMonitorMagnify_t mf, CAEN_DGTZ_AnalogMonitorInspectorInverter_t ami)
 	{
 		if (hLinkdll)
 		{
@@ -1340,17 +1477,17 @@ public:
 				isCAEN_DGTZ_SetAnalogInspectionMonParams = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetAnalogInspectionMonParams)
-				return lpCAEN_DGTZ_SetAnalogInspectionMonParams(handle,channelmask,offset,mf,ami);
+				return lpCAEN_DGTZ_SetAnalogInspectionMonParams(handle, channelmask, offset, mf, ami);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetAnalogInspectionMonParams)(int, uint32_t*, uint32_t*, CAEN_DGTZ_AnalogMonitorMagnify_t*, CAEN_DGTZ_AnalogMonitorInspectorInverter_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetAnalogInspectionMonParams)(int, uint32_t*, uint32_t*, CAEN_DGTZ_AnalogMonitorMagnify_t*, CAEN_DGTZ_AnalogMonitorInspectorInverter_t*);
 	LPCAEN_DGTZ_GetAnalogInspectionMonParams lpCAEN_DGTZ_GetAnalogInspectionMonParams = NULL;
 	long isCAEN_DGTZ_GetAnalogInspectionMonParams = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetAnalogInspectionMonParams(int handle, uint32_t* channelmask, uint32_t* offset, CAEN_DGTZ_AnalogMonitorMagnify_t* mf, CAEN_DGTZ_AnalogMonitorInspectorInverter_t* ami)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetAnalogInspectionMonParams(int handle, uint32_t* channelmask, uint32_t* offset, CAEN_DGTZ_AnalogMonitorMagnify_t* mf, CAEN_DGTZ_AnalogMonitorInspectorInverter_t* ami)
 	{
 		if (hLinkdll)
 		{
@@ -1363,15 +1500,15 @@ public:
 			if (NULL != lpCAEN_DGTZ_GetAnalogInspectionMonParams)
 				return lpCAEN_DGTZ_GetAnalogInspectionMonParams(handle, channelmask, offset, mf, ami);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_DisableEventAlignedReadout)(int);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_DisableEventAlignedReadout)(int);
 	LPCAEN_DGTZ_DisableEventAlignedReadout lpCAEN_DGTZ_DisableEventAlignedReadout = NULL;
 	long isCAEN_DGTZ_DisableEventAlignedReadout = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_DisableEventAlignedReadout(int handle)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_DisableEventAlignedReadout(int handle)
 	{
 		if (hLinkdll)
 		{
@@ -1384,15 +1521,15 @@ public:
 			if (NULL != lpCAEN_DGTZ_DisableEventAlignedReadout)
 				return lpCAEN_DGTZ_DisableEventAlignedReadout(handle);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetEventPackaging)(int, CAEN_DGTZ_EnaDis_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetEventPackaging)(int, CAEN_DGTZ_EnaDis_t);
 	LPCAEN_DGTZ_SetEventPackaging lpCAEN_DGTZ_SetEventPackaging = NULL;
 	long isCAEN_DGTZ_SetEventPackaging = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetEventPackaging(int handle, CAEN_DGTZ_EnaDis_t mode)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetEventPackaging(int handle, CAEN_DGTZ_EnaDis_t mode)
 	{
 		if (hLinkdll)
 		{
@@ -1403,17 +1540,17 @@ public:
 				isCAEN_DGTZ_SetEventPackaging = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetEventPackaging)
-				return lpCAEN_DGTZ_SetEventPackaging(handle,mode);
+				return lpCAEN_DGTZ_SetEventPackaging(handle, mode);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetEventPackaging)(int, CAEN_DGTZ_EnaDis_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetEventPackaging)(int, CAEN_DGTZ_EnaDis_t*);
 	LPCAEN_DGTZ_GetEventPackaging lpCAEN_DGTZ_GetEventPackaging = NULL;
 	long isCAEN_DGTZ_GetEventPackaging = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetEventPackaging(int handle, CAEN_DGTZ_EnaDis_t* mode)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetEventPackaging(int handle, CAEN_DGTZ_EnaDis_t* mode)
 	{
 		if (hLinkdll)
 		{
@@ -1424,17 +1561,17 @@ public:
 				isCAEN_DGTZ_GetEventPackaging = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetEventPackaging)
-				return lpCAEN_DGTZ_GetEventPackaging(handle,mode);
+				return lpCAEN_DGTZ_GetEventPackaging(handle, mode);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetMaxNumAggregatesBLT)(int, uint32_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetMaxNumAggregatesBLT)(int, uint32_t);
 	LPCAEN_DGTZ_SetMaxNumAggregatesBLT lpCAEN_DGTZ_SetMaxNumAggregatesBLT = NULL;
 	long isCAEN_DGTZ_SetMaxNumAggregatesBLT = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetMaxNumAggregatesBLT(int handle, uint32_t numAggr)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetMaxNumAggregatesBLT(int handle, uint32_t numAggr)
 	{
 		if (hLinkdll)
 		{
@@ -1447,15 +1584,15 @@ public:
 			if (NULL != lpCAEN_DGTZ_SetMaxNumAggregatesBLT)
 				return lpCAEN_DGTZ_SetMaxNumAggregatesBLT(handle, numAggr);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetMaxNumEventsBLT)(int, uint32_t);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetMaxNumEventsBLT)(int, uint32_t);
 	LPCAEN_DGTZ_SetMaxNumEventsBLT lpCAEN_DGTZ_SetMaxNumEventsBLT = NULL;
 	long isCAEN_DGTZ_SetMaxNumEventsBLT = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetMaxNumEventsBLT(int handle, uint32_t numEvents)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetMaxNumEventsBLT(int handle, uint32_t numEvents)
 	{
 		if (hLinkdll)
 		{
@@ -1468,15 +1605,15 @@ public:
 			if (NULL != lpCAEN_DGTZ_SetMaxNumEventsBLT)
 				return lpCAEN_DGTZ_SetMaxNumEventsBLT(handle, numEvents);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetMaxNumAggregatesBLT)(int, uint32_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetMaxNumAggregatesBLT)(int, uint32_t*);
 	LPCAEN_DGTZ_GetMaxNumAggregatesBLT lpCAEN_DGTZ_GetMaxNumAggregatesBLT = NULL;
 	long isCAEN_DGTZ_GetMaxNumAggregatesBLT = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetMaxNumAggregatesBLT(int handle, uint32_t* numAggr)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetMaxNumAggregatesBLT(int handle, uint32_t* numAggr)
 	{
 		if (hLinkdll)
 		{
@@ -1489,15 +1626,15 @@ public:
 			if (NULL != lpCAEN_DGTZ_GetMaxNumAggregatesBLT)
 				return lpCAEN_DGTZ_GetMaxNumAggregatesBLT(handle, numAggr);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetMaxNumEventsBLT)(int, uint32_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetMaxNumEventsBLT)(int, uint32_t*);
 	LPCAEN_DGTZ_GetMaxNumEventsBLT lpCAEN_DGTZ_GetMaxNumEventsBLT = NULL;
 	long isCAEN_DGTZ_GetMaxNumEventsBLT = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetMaxNumEventsBLT(int handle, uint32_t* numEvents)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetMaxNumEventsBLT(int handle, uint32_t* numEvents)
 	{
 		if (hLinkdll)
 		{
@@ -1508,17 +1645,17 @@ public:
 				isCAEN_DGTZ_GetMaxNumEventsBLT = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetMaxNumEventsBLT)
-				return lpCAEN_DGTZ_GetMaxNumEventsBLT(handle,numEvents);
+				return lpCAEN_DGTZ_GetMaxNumEventsBLT(handle, numEvents);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_MallocReadoutBuffer)(int, char**, uint32_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_MallocReadoutBuffer)(int, char**, uint32_t*);
 	LPCAEN_DGTZ_MallocReadoutBuffer lpCAEN_DGTZ_MallocReadoutBuffer = NULL;
 	long isCAEN_DGTZ_MallocReadoutBuffer = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_MallocReadoutBuffer(int handle, char** buffer, uint32_t* size)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_MallocReadoutBuffer(int handle, char** buffer, uint32_t* size)
 	{
 		if (hLinkdll)
 		{
@@ -1529,17 +1666,17 @@ public:
 				isCAEN_DGTZ_MallocReadoutBuffer = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_MallocReadoutBuffer)
-				return lpCAEN_DGTZ_MallocReadoutBuffer(handle,buffer,size);
+				return lpCAEN_DGTZ_MallocReadoutBuffer(handle, buffer, size);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_FreeReadoutBuffer)(char**);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_FreeReadoutBuffer)(char**);
 	LPCAEN_DGTZ_FreeReadoutBuffer lpCAEN_DGTZ_FreeReadoutBuffer = NULL;
 	long isCAEN_DGTZ_FreeReadoutBuffer = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_FreeReadoutBuffer(char** buffer)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_FreeReadoutBuffer(char** buffer)
 	{
 		if (hLinkdll)
 		{
@@ -1552,15 +1689,15 @@ public:
 			if (NULL != lpCAEN_DGTZ_FreeReadoutBuffer)
 				return lpCAEN_DGTZ_FreeReadoutBuffer(buffer);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_ReadData)(int, CAEN_DGTZ_ReadMode_t, char*, uint32_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_ReadData)(int, CAEN_DGTZ_ReadMode_t, char*, uint32_t*);
 	LPCAEN_DGTZ_ReadData lpCAEN_DGTZ_ReadData = NULL;
 	long isCAEN_DGTZ_ReadData = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_ReadData(int handle, CAEN_DGTZ_ReadMode_t mode, char* buffer, uint32_t* bufferSize)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_ReadData(int handle, CAEN_DGTZ_ReadMode_t mode, char* buffer, uint32_t* bufferSize)
 	{
 		if (hLinkdll)
 		{
@@ -1571,17 +1708,17 @@ public:
 				isCAEN_DGTZ_ReadData = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_ReadData)
-				return lpCAEN_DGTZ_ReadData(handle,mode,buffer,bufferSize);
+				return lpCAEN_DGTZ_ReadData(handle, mode, buffer, bufferSize);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetNumEvents)(int, char*, uint32_t, uint32_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetNumEvents)(int, char*, uint32_t, uint32_t*);
 	LPCAEN_DGTZ_GetNumEvents lpCAEN_DGTZ_GetNumEvents = NULL;
 	long isCAEN_DGTZ_GetNumEvents = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetNumEvents(int handle, char* buffer, uint32_t buffsize, uint32_t* numEvents)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetNumEvents(int handle, char* buffer, uint32_t buffsize, uint32_t* numEvents)
 	{
 		if (hLinkdll)
 		{
@@ -1592,17 +1729,17 @@ public:
 				isCAEN_DGTZ_GetNumEvents = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetNumEvents)
-				return lpCAEN_DGTZ_GetNumEvents(handle,buffer,buffsize,numEvents);
+				return lpCAEN_DGTZ_GetNumEvents(handle, buffer, buffsize, numEvents);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetEventInfo)(int, char*, uint32_t, int32_t, CAEN_DGTZ_EventInfo_t*, char**);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetEventInfo)(int, char*, uint32_t, int32_t, CAEN_DGTZ_EventInfo_t*, char**);
 	LPCAEN_DGTZ_GetEventInfo lpCAEN_DGTZ_GetEventInfo = NULL;
 	long isCAEN_DGTZ_GetEventInfo = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetEventInfo(int handle, char* buffer, uint32_t buffsize, int32_t numEvent, CAEN_DGTZ_EventInfo_t* eventInfo, char** EventPtr)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetEventInfo(int handle, char* buffer, uint32_t buffsize, int32_t numEvent, CAEN_DGTZ_EventInfo_t* eventInfo, char** EventPtr)
 	{
 		if (hLinkdll)
 		{
@@ -1613,17 +1750,17 @@ public:
 				isCAEN_DGTZ_GetEventInfo = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetEventInfo)
-				return lpCAEN_DGTZ_GetEventInfo(handle,buffer,buffsize,numEvent,eventInfo,EventPtr);
+				return lpCAEN_DGTZ_GetEventInfo(handle, buffer, buffsize, numEvent, eventInfo, EventPtr);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_DecodeEvent)(int, char*, void**);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_DecodeEvent)(int, char*, void**);
 	LPCAEN_DGTZ_DecodeEvent lpCAEN_DGTZ_DecodeEvent = NULL;
 	long isCAEN_DGTZ_DecodeEvent = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_DecodeEvent(int handle, char* evtPtr, void** Evt)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_DecodeEvent(int handle, char* evtPtr, void** Evt)
 	{
 		if (hLinkdll)
 		{
@@ -1634,17 +1771,17 @@ public:
 				isCAEN_DGTZ_DecodeEvent = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_DecodeEvent)
-				return lpCAEN_DGTZ_DecodeEvent(handle,evtPtr,Evt);
+				return lpCAEN_DGTZ_DecodeEvent(handle, evtPtr, Evt);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_FreeEvent)(int, void**);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_FreeEvent)(int, void**);
 	LPCAEN_DGTZ_FreeEvent lpCAEN_DGTZ_FreeEvent = NULL;
 	long isCAEN_DGTZ_FreeEvent = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_FreeEvent(int handle, void** Evt)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_FreeEvent(int handle, void** Evt)
 	{
 		if (hLinkdll)
 		{
@@ -1655,17 +1792,17 @@ public:
 				isCAEN_DGTZ_FreeEvent = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_FreeEvent)
-				return lpCAEN_DGTZ_FreeEvent(handle,Evt);
+				return lpCAEN_DGTZ_FreeEvent(handle, Evt);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetDPPEvents)(int, char*, uint32_t, void**, uint32_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetDPPEvents)(int, char*, uint32_t, void**, uint32_t*);
 	LPCAEN_DGTZ_GetDPPEvents lpCAEN_DGTZ_GetDPPEvents = NULL;
 	long isCAEN_DGTZ_GetDPPEvents = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetDPPEvents(int handle, char* buffer, uint32_t buffsize, void** events, uint32_t* numEventsArray)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetDPPEvents(int handle, char* buffer, uint32_t buffsize, void** events, uint32_t* numEventsArray)
 	{
 		if (hLinkdll)
 		{
@@ -1676,17 +1813,17 @@ public:
 				isCAEN_DGTZ_GetDPPEvents = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_GetDPPEvents)
-				return lpCAEN_DGTZ_GetDPPEvents(handle,buffer,buffsize,events,numEventsArray);
+				return lpCAEN_DGTZ_GetDPPEvents(handle, buffer, buffsize, events, numEventsArray);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_MallocDPPEvents)(int, void**, uint32_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_MallocDPPEvents)(int, void**, uint32_t*);
 	LPCAEN_DGTZ_MallocDPPEvents lpCAEN_DGTZ_MallocDPPEvents = NULL;
 	long isCAEN_DGTZ_MallocDPPEvents = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_MallocDPPEvents(int handle, void** events, uint32_t* allocatedSize)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_MallocDPPEvents(int handle, void** events, uint32_t* allocatedSize)
 	{
 		if (hLinkdll)
 		{
@@ -1697,17 +1834,17 @@ public:
 				isCAEN_DGTZ_MallocDPPEvents = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_MallocDPPEvents)
-				return lpCAEN_DGTZ_MallocDPPEvents(handle,events,allocatedSize);
+				return lpCAEN_DGTZ_MallocDPPEvents(handle, events, allocatedSize);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_FreeDPPEvents)(int, void**);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_FreeDPPEvents)(int, void**);
 	LPCAEN_DGTZ_FreeDPPEvents lpCAEN_DGTZ_FreeDPPEvents = NULL;
 	long isCAEN_DGTZ_FreeDPPEvents = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_FreeDPPEvents(int handle, void** events)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_FreeDPPEvents(int handle, void** events)
 	{
 		if (hLinkdll)
 		{
@@ -1718,17 +1855,17 @@ public:
 				isCAEN_DGTZ_FreeDPPEvents = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_FreeDPPEvents)
-				return lpCAEN_DGTZ_FreeDPPEvents(handle,events);
+				return lpCAEN_DGTZ_FreeDPPEvents(handle, events);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_MallocDPPWaveforms)(int, void**, uint32_t*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_MallocDPPWaveforms)(int, void**, uint32_t*);
 	LPCAEN_DGTZ_MallocDPPWaveforms lpCAEN_DGTZ_MallocDPPWaveforms = NULL;
 	long isCAEN_DGTZ_MallocDPPWaveforms = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_MallocDPPWaveforms(int handle, void** waveforms, uint32_t* allocatedSize)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_MallocDPPWaveforms(int handle, void** waveforms, uint32_t* allocatedSize)
 	{
 		if (hLinkdll)
 		{
@@ -1739,17 +1876,17 @@ public:
 				isCAEN_DGTZ_MallocDPPWaveforms = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_MallocDPPWaveforms)
-				return lpCAEN_DGTZ_MallocDPPWaveforms(handle,waveforms,allocatedSize);
+				return lpCAEN_DGTZ_MallocDPPWaveforms(handle, waveforms, allocatedSize);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_FreeDPPWaveforms)(int, void*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_FreeDPPWaveforms)(int, void*);
 	LPCAEN_DGTZ_FreeDPPWaveforms lpCAEN_DGTZ_FreeDPPWaveforms = NULL;
 	long isCAEN_DGTZ_FreeDPPWaveforms = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_FreeDPPWaveforms(int handle, void* Waveforms)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_FreeDPPWaveforms(int handle, void* Waveforms)
 	{
 		if (hLinkdll)
 		{
@@ -1762,15 +1899,15 @@ public:
 			if (NULL != lpCAEN_DGTZ_FreeDPPWaveforms)
 				return lpCAEN_DGTZ_FreeDPPWaveforms(handle, Waveforms);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_DecodeDPPWaveforms)(int, void*, void*);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_DecodeDPPWaveforms)(int, void*, void*);
 	LPCAEN_DGTZ_DecodeDPPWaveforms lpCAEN_DGTZ_DecodeDPPWaveforms = NULL;
 	long isCAEN_DGTZ_DecodeDPPWaveforms = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_DecodeDPPWaveforms(int handle, void* event, void* waveforms)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_DecodeDPPWaveforms(int handle, void* event, void* waveforms)
 	{
 		if (hLinkdll)
 		{
@@ -1781,17 +1918,17 @@ public:
 				isCAEN_DGTZ_DecodeDPPWaveforms = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_DecodeDPPWaveforms)
-				return lpCAEN_DGTZ_DecodeDPPWaveforms(handle,event,waveforms);
+				return lpCAEN_DGTZ_DecodeDPPWaveforms(handle, event, waveforms);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
-	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetNumEventsPerAggregate)(int, uint32_t, int);
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetNumEventsPerAggregate)(int, uint32_t, int);
 	LPCAEN_DGTZ_SetNumEventsPerAggregate lpCAEN_DGTZ_SetNumEventsPerAggregate = NULL;
 	long isCAEN_DGTZ_SetNumEventsPerAggregate = 0;
-	CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetNumEventsPerAggregate(int handle, uint32_t numEvents,int channel)
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetNumEventsPerAggregate(int handle, uint32_t numEvents, int channel)
 	{
 		if (hLinkdll)
 		{
@@ -1802,12 +1939,560 @@ public:
 				isCAEN_DGTZ_SetNumEventsPerAggregate = FUNC_LOADED;
 			}
 			if (NULL != lpCAEN_DGTZ_SetNumEventsPerAggregate)
-				return lpCAEN_DGTZ_SetNumEventsPerAggregate(handle,numEvents,channel);
+				return lpCAEN_DGTZ_SetNumEventsPerAggregate(handle, numEvents, channel);
 			else
-				return (CAEN_DGTZ_GenericError);
+				return (ERR_CANNOT_LOAD_FUNCTION);
 		}
 		else
-			return(CAEN_DGTZ_GenericError);
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetNumEventsPerAggregate)(int, uint32_t*, int);
+	LPCAEN_DGTZ_GetNumEventsPerAggregate lpCAEN_DGTZ_GetNumEventsPerAggregate = NULL;
+	long isCAEN_DGTZ_GetNumEventsPerAggregate = 0;
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetNumEventsPerAggregate(int handle, uint32_t* numEvents, int channel)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_GetNumEventsPerAggregate)
+			{
+				lpCAEN_DGTZ_GetNumEventsPerAggregate = NULL;
+				lpCAEN_DGTZ_GetNumEventsPerAggregate = (LPCAEN_DGTZ_GetNumEventsPerAggregate)GetProcAddress(hLinkdll, "CAEN_DGTZ_GetNumEventsPerAggregate");
+				isCAEN_DGTZ_GetNumEventsPerAggregate = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_GetNumEventsPerAggregate)
+				return lpCAEN_DGTZ_GetNumEventsPerAggregate(handle, numEvents, channel);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetDPPEventAggregation)(int, int, int);
+	LPCAEN_DGTZ_SetDPPEventAggregation lpCAEN_DGTZ_SetDPPEventAggregation = NULL;
+	long isCAEN_DGTZ_SetDPPEventAggregation = 0;
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetDPPEventAggregation(int handle, int threshold, int maxsize)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_SetDPPEventAggregation)
+			{
+				lpCAEN_DGTZ_SetDPPEventAggregation = NULL;
+				lpCAEN_DGTZ_SetDPPEventAggregation = (LPCAEN_DGTZ_SetDPPEventAggregation)GetProcAddress(hLinkdll, "CAEN_DGTZ_SetDPPEventAggregation");
+				isCAEN_DGTZ_SetDPPEventAggregation = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_SetDPPEventAggregation)
+				return lpCAEN_DGTZ_SetDPPEventAggregation(handle, threshold, maxsize);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetDPPParameters)(int, uint32_t, void*);
+	LPCAEN_DGTZ_SetDPPParameters lpCAEN_DGTZ_SetDPPParameters = NULL;
+	long isCAEN_DGTZ_SetDPPParameters = 0;
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetDPPParameters(int handle, uint32_t channelMask, void* params)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_SetDPPParameters)
+			{
+				lpCAEN_DGTZ_SetDPPParameters = NULL;
+				lpCAEN_DGTZ_SetDPPParameters = (LPCAEN_DGTZ_SetDPPParameters)GetProcAddress(hLinkdll, "CAEN_DGTZ_SetDPPParameters");
+				isCAEN_DGTZ_SetDPPParameters = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_SetDPPParameters)
+				return lpCAEN_DGTZ_SetDPPParameters(handle, channelMask, params);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetDPPAcquisitionMode)(int, CAEN_DGTZ_DPP_AcqMode_t, CAEN_DGTZ_DPP_SaveParam_t);
+	LPCAEN_DGTZ_SetDPPAcquisitionMode lpCAEN_DGTZ_SetDPPAcquisitionMode = NULL;
+	long isCAEN_DGTZ_SetDPPAcquisitionMode = 0;
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetDPPAcquisitionMode(int handle, CAEN_DGTZ_DPP_AcqMode_t mode, CAEN_DGTZ_DPP_SaveParam_t param)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_SetDPPAcquisitionMode)
+			{
+				lpCAEN_DGTZ_SetDPPAcquisitionMode = NULL;
+				lpCAEN_DGTZ_SetDPPAcquisitionMode = (LPCAEN_DGTZ_SetDPPAcquisitionMode)GetProcAddress(hLinkdll, "CAEN_DGTZ_SetDPPAcquisitionMode");
+				isCAEN_DGTZ_SetDPPAcquisitionMode = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_SetDPPAcquisitionMode)
+				return lpCAEN_DGTZ_SetDPPAcquisitionMode(handle, mode, param);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetDPPAcquisitionMode)(int, CAEN_DGTZ_DPP_AcqMode_t*, CAEN_DGTZ_DPP_SaveParam_t*);
+	LPCAEN_DGTZ_GetDPPAcquisitionMode lpCAEN_DGTZ_GetDPPAcquisitionMode = NULL;
+	long isCAEN_DGTZ_GetDPPAcquisitionMode = 0;
+	CAEN_DGTZ_ErrorCode CAEN_DGTZ_GetDPPAcquisitionMode(int handle, CAEN_DGTZ_DPP_AcqMode_t* mode, CAEN_DGTZ_DPP_SaveParam_t* param)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_GetDPPAcquisitionMode)
+			{
+				lpCAEN_DGTZ_GetDPPAcquisitionMode = NULL;
+				lpCAEN_DGTZ_GetDPPAcquisitionMode = (LPCAEN_DGTZ_GetDPPAcquisitionMode)GetProcAddress(hLinkdll, "CAEN_DGTZ_GetDPPAcquisitionMode");
+				isCAEN_DGTZ_GetDPPAcquisitionMode = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_GetDPPAcquisitionMode)
+				return lpCAEN_DGTZ_GetDPPAcquisitionMode(handle, mode, param);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetDPPTriggerMode)(int, CAEN_DGTZ_DPP_TriggerMode_t);
+	LPCAEN_DGTZ_SetDPPTriggerMode lpCAEN_DGTZ_SetDPPTriggerMode = NULL;
+	long isCAEN_DGTZ_SetDPPTriggerMode = 0;
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetDPPTriggerMode(int handle, CAEN_DGTZ_DPP_TriggerMode_t mode)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_SetDPPTriggerMode)
+			{
+				lpCAEN_DGTZ_SetDPPTriggerMode = NULL;
+				lpCAEN_DGTZ_SetDPPTriggerMode = (LPCAEN_DGTZ_SetDPPTriggerMode)GetProcAddress(hLinkdll, "CAEN_DGTZ_SetDPPTriggerMode");
+				isCAEN_DGTZ_SetDPPTriggerMode = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_SetDPPTriggerMode)
+				return lpCAEN_DGTZ_SetDPPTriggerMode(handle, mode);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetDPPTriggerMode)(int, CAEN_DGTZ_DPP_TriggerMode_t*);
+	LPCAEN_DGTZ_GetDPPTriggerMode lpCAEN_DGTZ_GetDPPTriggerMode = NULL;
+	long isCAEN_DGTZ_GetDPPTriggerMode = 0;
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetDPPTriggerMode(int handle, CAEN_DGTZ_DPP_TriggerMode_t* mode)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_GetDPPTriggerMode)
+			{
+				lpCAEN_DGTZ_GetDPPTriggerMode = NULL;
+				lpCAEN_DGTZ_GetDPPTriggerMode = (LPCAEN_DGTZ_GetDPPTriggerMode)GetProcAddress(hLinkdll, "CAEN_DGTZ_GetDPPTriggerMode");
+				isCAEN_DGTZ_GetDPPTriggerMode = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_GetDPPTriggerMode)
+				return lpCAEN_DGTZ_GetDPPTriggerMode(handle, mode);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetDPP_PHA_VirtualProbe)(int);
+	LPCAEN_DGTZ_SetDPP_PHA_VirtualProbe lpCAEN_DGTZ_SetDPP_PHA_VirtualProbe = NULL;
+	long isCAEN_DGTZ_SetDPP_PHA_VirtualProbe = 0;
+	DPP_DEPRECATED(CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetDPP_PHA_VirtualProbe(int handle, CAEN_DGTZ_DPP_VirtualProbe_t mode, CAEN_DGTZ_DPP_PHA_VirtualProbe1_t vp1, CAEN_DGTZ_DPP_PHA_VirtualProbe2_t vp2, CAEN_DGTZ_DPP_PHA_DigitalProbe_t dp))
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_SetDPP_PHA_VirtualProbe)
+			{
+				lpCAEN_DGTZ_SetDPP_PHA_VirtualProbe = NULL;
+				lpCAEN_DGTZ_SetDPP_PHA_VirtualProbe = (LPCAEN_DGTZ_SetDPP_PHA_VirtualProbe)GetProcAddress(hLinkdll, "CAEN_DGTZ_SetDPP_PHA_VirtualProbe");
+				isCAEN_DGTZ_SetDPP_PHA_VirtualProbe = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_SetDPP_PHA_VirtualProbe)
+				return lpCAEN_DGTZ_SetDPP_PHA_VirtualProbe(handle);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetDPP_PHA_VirtualProbe)(int, CAEN_DGTZ_DPP_VirtualProbe_t*, CAEN_DGTZ_DPP_PHA_VirtualProbe1_t*, CAEN_DGTZ_DPP_PHA_VirtualProbe2_t*, CAEN_DGTZ_DPP_PHA_DigitalProbe_t*);
+	LPCAEN_DGTZ_GetDPP_PHA_VirtualProbe lpCAEN_DGTZ_GetDPP_PHA_VirtualProbe = NULL;
+	long isCAEN_DGTZ_GetDPP_PHA_VirtualProbe = 0;
+	DPP_DEPRECATED(CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetDPP_PHA_VirtualProbe(int handle, CAEN_DGTZ_DPP_VirtualProbe_t* mode, CAEN_DGTZ_DPP_PHA_VirtualProbe1_t* vp1, CAEN_DGTZ_DPP_PHA_VirtualProbe2_t* vp2, CAEN_DGTZ_DPP_PHA_DigitalProbe_t* dp))
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_GetDPP_PHA_VirtualProbe)
+			{
+				lpCAEN_DGTZ_GetDPP_PHA_VirtualProbe = NULL;
+				lpCAEN_DGTZ_GetDPP_PHA_VirtualProbe = (LPCAEN_DGTZ_GetDPP_PHA_VirtualProbe)GetProcAddress(hLinkdll, "CAEN_DGTZ_GetDPP_PHA_VirtualProbe");
+				isCAEN_DGTZ_GetDPP_PHA_VirtualProbe = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_GetDPP_PHA_VirtualProbe)
+				return lpCAEN_DGTZ_GetDPP_PHA_VirtualProbe(handle, mode, vp1, vp2, dp);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetDPP_PSD_VirtualProbe)(int, CAEN_DGTZ_DPP_VirtualProbe_t, CAEN_DGTZ_DPP_PSD_VirtualProbe_t, CAEN_DGTZ_DPP_PSD_DigitalProbe1_t, CAEN_DGTZ_DPP_PSD_DigitalProbe2_t);
+	LPCAEN_DGTZ_SetDPP_PSD_VirtualProbe lpCAEN_DGTZ_SetDPP_PSD_VirtualProbe = NULL;
+	long isCAEN_DGTZ_SetDPP_PSD_VirtualProbe = 0;
+	DPP_DEPRECATED(CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetDPP_PSD_VirtualProbe(int handle, CAEN_DGTZ_DPP_VirtualProbe_t mode, CAEN_DGTZ_DPP_PSD_VirtualProbe_t vp, CAEN_DGTZ_DPP_PSD_DigitalProbe1_t dp1, CAEN_DGTZ_DPP_PSD_DigitalProbe2_t dp2))
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_SetDPP_PSD_VirtualProbe)
+			{
+				lpCAEN_DGTZ_SetDPP_PSD_VirtualProbe = NULL;
+				lpCAEN_DGTZ_SetDPP_PSD_VirtualProbe = (LPCAEN_DGTZ_SetDPP_PSD_VirtualProbe)GetProcAddress(hLinkdll, "CAEN_DGTZ_SetDPP_PSD_VirtualProbe");
+				isCAEN_DGTZ_SetDPP_PSD_VirtualProbe = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_SetDPP_PSD_VirtualProbe)
+				return lpCAEN_DGTZ_SetDPP_PSD_VirtualProbe(handle, mode, vp, dp1, dp2);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetDPP_PSD_VirtualProbe)(int, CAEN_DGTZ_DPP_VirtualProbe_t*, CAEN_DGTZ_DPP_PSD_VirtualProbe_t*, CAEN_DGTZ_DPP_PSD_DigitalProbe1_t*, CAEN_DGTZ_DPP_PSD_DigitalProbe2_t*);
+	LPCAEN_DGTZ_GetDPP_PSD_VirtualProbe lpCAEN_DGTZ_GetDPP_PSD_VirtualProbe = NULL;
+	long isCAEN_DGTZ_GetDPP_PSD_VirtualProbe = 0;
+	DPP_DEPRECATED(CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetDPP_PSD_VirtualProbe(int handle, CAEN_DGTZ_DPP_VirtualProbe_t* mode, CAEN_DGTZ_DPP_PSD_VirtualProbe_t* vp, CAEN_DGTZ_DPP_PSD_DigitalProbe1_t* dp1, CAEN_DGTZ_DPP_PSD_DigitalProbe2_t* dp2))
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_GetDPP_PSD_VirtualProbe)
+			{
+				lpCAEN_DGTZ_GetDPP_PSD_VirtualProbe = NULL;
+				lpCAEN_DGTZ_GetDPP_PSD_VirtualProbe = (LPCAEN_DGTZ_GetDPP_PSD_VirtualProbe)GetProcAddress(hLinkdll, "CAEN_DGTZ_GetDPP_PSD_VirtualProbe");
+				isCAEN_DGTZ_GetDPP_PSD_VirtualProbe = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_GetDPP_PSD_VirtualProbe)
+				return lpCAEN_DGTZ_GetDPP_PSD_VirtualProbe(handle, mode, vp, dp1, dp2);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+
+	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_SetDPP_CI_VirtualProbe)(int, CAEN_DGTZ_DPP_VirtualProbe_t, CAEN_DGTZ_DPP_CI_VirtualProbe_t, CAEN_DGTZ_DPP_CI_DigitalProbe1_t, CAEN_DGTZ_DPP_CI_DigitalProbe2_t);
+	LPCAEN_DGTZ_SetDPP_CI_VirtualProbe lpCAEN_DGTZ_SetDPP_CI_VirtualProbe = NULL;
+	long isCAEN_DGTZ_SetDPP_CI_VirtualProbe = 0;
+	DPP_DEPRECATED(CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_SetDPP_CI_VirtualProbe(int handle, CAEN_DGTZ_DPP_VirtualProbe_t mode, CAEN_DGTZ_DPP_CI_VirtualProbe_t vp, CAEN_DGTZ_DPP_CI_DigitalProbe1_t dp1, CAEN_DGTZ_DPP_CI_DigitalProbe2_t dp2))
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_SetDPP_CI_VirtualProbe)
+			{
+				lpCAEN_DGTZ_SetDPP_CI_VirtualProbe = NULL;
+				lpCAEN_DGTZ_SetDPP_CI_VirtualProbe = (LPCAEN_DGTZ_SetDPP_CI_VirtualProbe)GetProcAddress(hLinkdll, "CAEN_DGTZ_SetDPP_CI_VirtualProbe");
+				isCAEN_DGTZ_SetDPP_CI_VirtualProbe = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_SetDPP_CI_VirtualProbe)
+				return lpCAEN_DGTZ_SetDPP_CI_VirtualProbe(handle, mode, vp, dp1, dp2);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(CAENDGTZ_API* LPCAEN_DGTZ_GetDPP_CI_VirtualProbe)(int, CAEN_DGTZ_DPP_VirtualProbe_t*, CAEN_DGTZ_DPP_CI_VirtualProbe_t*, CAEN_DGTZ_DPP_CI_DigitalProbe1_t*, CAEN_DGTZ_DPP_CI_DigitalProbe2_t*);
+	LPCAEN_DGTZ_GetDPP_CI_VirtualProbe lpCAEN_DGTZ_GetDPP_CI_VirtualProbe = NULL;
+	long isCAEN_DGTZ_GetDPP_CI_VirtualProbe = 0;
+	DPP_DEPRECATED(CAEN_DGTZ_ErrorCode CAENDGTZ_API CAEN_DGTZ_GetDPP_CI_VirtualProbe(int handle, CAEN_DGTZ_DPP_VirtualProbe_t* mode, CAEN_DGTZ_DPP_CI_VirtualProbe_t* vp, CAEN_DGTZ_DPP_CI_DigitalProbe1_t* dp1, CAEN_DGTZ_DPP_CI_DigitalProbe2_t* dp2))
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_GetDPP_CI_VirtualProbe)
+			{
+				lpCAEN_DGTZ_GetDPP_CI_VirtualProbe = NULL;
+				lpCAEN_DGTZ_GetDPP_CI_VirtualProbe = (LPCAEN_DGTZ_GetDPP_CI_VirtualProbe)GetProcAddress(hLinkdll, "CAEN_DGTZ_GetDPP_CI_VirtualProbe");
+				isCAEN_DGTZ_GetDPP_CI_VirtualProbe = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_GetDPP_CI_VirtualProbe)
+				return lpCAEN_DGTZ_GetDPP_CI_VirtualProbe(handle, mode, vp, dp1, dp2);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetDPP_VirtualProbe)(int, int, int);
+	LPCAEN_DGTZ_SetDPP_VirtualProbe lpCAEN_DGTZ_SetDPP_VirtualProbe = NULL;
+	long isCAEN_DGTZ_SetDPP_VirtualProbe = 0;
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetDPP_VirtualProbe(int handle, int trace, int probe)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_SetDPP_VirtualProbe)
+			{
+				lpCAEN_DGTZ_SetDPP_VirtualProbe = NULL;
+				lpCAEN_DGTZ_SetDPP_VirtualProbe = (LPCAEN_DGTZ_SetDPP_VirtualProbe)GetProcAddress(hLinkdll, "CAEN_DGTZ_SetDPP_VirtualProbe");
+				isCAEN_DGTZ_SetDPP_VirtualProbe = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_SetDPP_VirtualProbe)
+				return lpCAEN_DGTZ_SetDPP_VirtualProbe(handle, trace, probe);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetDPP_VirtualProbe)(int, int, int*);
+	LPCAEN_DGTZ_GetDPP_VirtualProbe lpCAEN_DGTZ_GetDPP_VirtualProbe = NULL;
+	long isCAEN_DGTZ_GetDPP_VirtualProbe = 0;
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetDPP_VirtualProbe(int handle, int trace, int* probe)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_GetDPP_VirtualProbe)
+			{
+				lpCAEN_DGTZ_GetDPP_VirtualProbe = NULL;
+				lpCAEN_DGTZ_GetDPP_VirtualProbe = (LPCAEN_DGTZ_GetDPP_VirtualProbe)GetProcAddress(hLinkdll, "CAEN_DGTZ_GetDPP_VirtualProbe");
+				isCAEN_DGTZ_GetDPP_VirtualProbe = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_GetDPP_VirtualProbe)
+				return lpCAEN_DGTZ_GetDPP_VirtualProbe(handle, trace, probe);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetDPP_SupportedVirtualProbes)(int, int, int[], int*);
+	LPCAEN_DGTZ_GetDPP_SupportedVirtualProbes lpCAEN_DGTZ_GetDPP_SupportedVirtualProbes = NULL;
+	long isCAEN_DGTZ_GetDPP_SupportedVirtualProbes = 0;
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetDPP_SupportedVirtualProbes(int handle, int trace, int probes[], int* numProbes)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_GetDPP_SupportedVirtualProbes)
+			{
+				lpCAEN_DGTZ_GetDPP_SupportedVirtualProbes = NULL;
+				lpCAEN_DGTZ_GetDPP_SupportedVirtualProbes = (LPCAEN_DGTZ_GetDPP_SupportedVirtualProbes)GetProcAddress(hLinkdll, "CAEN_DGTZ_GetDPP_SupportedVirtualProbes");
+				isCAEN_DGTZ_GetDPP_SupportedVirtualProbes = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_GetDPP_SupportedVirtualProbes)
+				return lpCAEN_DGTZ_GetDPP_SupportedVirtualProbes(handle, trace, probes, numProbes);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetDPP_VirtualProbeName)(int, char[]);
+	LPCAEN_DGTZ_GetDPP_VirtualProbeName lpCAEN_DGTZ_GetDPP_VirtualProbeName = NULL;
+	long isCAEN_DGTZ_GetDPP_VirtualProbeName = 0;
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetDPP_VirtualProbeName(int probe, char name[])
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_GetDPP_VirtualProbeName)
+			{
+				lpCAEN_DGTZ_GetDPP_VirtualProbeName = NULL;
+				lpCAEN_DGTZ_GetDPP_VirtualProbeName = (LPCAEN_DGTZ_GetDPP_VirtualProbeName)GetProcAddress(hLinkdll, "CAEN_DGTZ_GetDPP_VirtualProbeName");
+				isCAEN_DGTZ_GetDPP_VirtualProbeName = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_GetDPP_VirtualProbeName)
+				return lpCAEN_DGTZ_GetDPP_VirtualProbeName(probe, name);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_AllocateEvent)(int, void**);
+	LPCAEN_DGTZ_AllocateEvent lpCAEN_DGTZ_AllocateEvent = NULL;
+	long isCAEN_DGTZ_AllocateEvent = 0;
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_AllocateEvent(int handle, void** Evt)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_AllocateEvent)
+			{
+				lpCAEN_DGTZ_AllocateEvent = NULL;
+				lpCAEN_DGTZ_AllocateEvent = (LPCAEN_DGTZ_AllocateEvent)GetProcAddress(hLinkdll, "CAEN_DGTZ_AllocateEvent");
+				isCAEN_DGTZ_AllocateEvent = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_AllocateEvent)
+				return lpCAEN_DGTZ_AllocateEvent(handle, Evt);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetIOLevel)(int, CAEN_DGTZ_IOLevel_t);
+	LPCAEN_DGTZ_SetIOLevel lpCAEN_DGTZ_SetIOLevel = NULL;
+	long isCAEN_DGTZ_SetIOLevel = 0;
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetIOLevel(int handle, CAEN_DGTZ_IOLevel_t level)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_SetIOLevel)
+			{
+				lpCAEN_DGTZ_SetIOLevel = NULL;
+				lpCAEN_DGTZ_SetIOLevel = (LPCAEN_DGTZ_SetIOLevel)GetProcAddress(hLinkdll, "CAEN_DGTZ_SetIOLevel");
+				isCAEN_DGTZ_SetIOLevel = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_SetIOLevel)
+				return lpCAEN_DGTZ_SetIOLevel(handle, level);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetIOLevel)(int, CAEN_DGTZ_IOLevel_t*);
+	LPCAEN_DGTZ_GetIOLevel lpCAEN_DGTZ_GetIOLevel = NULL;
+	long isCAEN_DGTZ_GetIOLevel = 0;
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetIOLevel(int handle, CAEN_DGTZ_IOLevel_t* level)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_GetIOLevel)
+			{
+				lpCAEN_DGTZ_GetIOLevel = NULL;
+				lpCAEN_DGTZ_GetIOLevel = (LPCAEN_DGTZ_GetIOLevel)GetProcAddress(hLinkdll, "CAEN_DGTZ_GetIOLevel");
+				isCAEN_DGTZ_GetIOLevel = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_GetIOLevel)
+				return lpCAEN_DGTZ_GetIOLevel(handle, level);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_SetTriggerPolarity)(int, uint32_t, CAEN_DGTZ_TriggerPolarity_t);
+	LPCAEN_DGTZ_SetTriggerPolarity lpCAEN_DGTZ_SetTriggerPolarity = NULL;
+	long isCAEN_DGTZ_SetTriggerPolarity = 0;
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_SetTriggerPolarity(int handle, uint32_t channel, CAEN_DGTZ_TriggerPolarity_t Polarity)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_SetTriggerPolarity)
+			{
+				lpCAEN_DGTZ_SetTriggerPolarity = NULL;
+				lpCAEN_DGTZ_SetTriggerPolarity = (LPCAEN_DGTZ_SetTriggerPolarity)GetProcAddress(hLinkdll, "CAEN_DGTZ_SetTriggerPolarity");
+				isCAEN_DGTZ_SetTriggerPolarity = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_SetTriggerPolarity)
+				return lpCAEN_DGTZ_SetTriggerPolarity(handle, channel, Polarity);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetTriggerPolarity)(int, uint32_t, CAEN_DGTZ_TriggerPolarity_t*);
+	LPCAEN_DGTZ_GetTriggerPolarity lpCAEN_DGTZ_GetTriggerPolarity = NULL;
+	long isCAEN_DGTZ_GetTriggerPolarity = 0;
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetTriggerPolarity(int handle, uint32_t channel, CAEN_DGTZ_TriggerPolarity_t* Polarity)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_GetTriggerPolarity)
+			{
+				lpCAEN_DGTZ_GetTriggerPolarity = NULL;
+				lpCAEN_DGTZ_GetTriggerPolarity = (LPCAEN_DGTZ_GetTriggerPolarity)GetProcAddress(hLinkdll, "CAEN_DGTZ_GetTriggerPolarity");
+				isCAEN_DGTZ_GetTriggerPolarity = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_GetTriggerPolarity)
+				return lpCAEN_DGTZ_GetTriggerPolarity(handle, channel, Polarity);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_RearmInterrupt)(int);
+	LPCAEN_DGTZ_RearmInterrupt lpCAEN_DGTZ_RearmInterrupt = NULL;
+	long isCAEN_DGTZ_RearmInterrupt = 0;
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_RearmInterrupt(int handle)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_RearmInterrupt)
+			{
+				lpCAEN_DGTZ_RearmInterrupt = NULL;
+				lpCAEN_DGTZ_RearmInterrupt = (LPCAEN_DGTZ_RearmInterrupt)GetProcAddress(hLinkdll, "CAEN_DGTZ_RearmInterrupt");
+				isCAEN_DGTZ_RearmInterrupt = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_RearmInterrupt)
+				return lpCAEN_DGTZ_RearmInterrupt(handle);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_Calibrate)(int);
+	LPCAEN_DGTZ_Calibrate lpCAEN_DGTZ_Calibrate = NULL;
+	long isCAEN_DGTZ_Calibrate = 0;
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_Calibrate(int handle)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_Calibrate)
+			{
+				lpCAEN_DGTZ_Calibrate = NULL;
+				lpCAEN_DGTZ_Calibrate = (LPCAEN_DGTZ_Calibrate)GetProcAddress(hLinkdll, "CAEN_DGTZ_Calibrate");
+				isCAEN_DGTZ_Calibrate = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_Calibrate)
+				return lpCAEN_DGTZ_Calibrate(handle);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_ReadTemperature)(int, int32_t, uint32_t*);
+	LPCAEN_DGTZ_ReadTemperature lpCAEN_DGTZ_ReadTemperature = NULL;
+	long isCAEN_DGTZ_ReadTemperature = 0;
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_ReadTemperature(int handle, int32_t ch, uint32_t* temp)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_ReadTemperature)
+			{
+				lpCAEN_DGTZ_ReadTemperature = NULL;
+				lpCAEN_DGTZ_ReadTemperature = (LPCAEN_DGTZ_ReadTemperature)GetProcAddress(hLinkdll, "CAEN_DGTZ_ReadTemperature");
+				isCAEN_DGTZ_ReadTemperature = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_ReadTemperature)
+				return lpCAEN_DGTZ_ReadTemperature(handle, ch, temp);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
+	}
+	typedef  CAEN_DGTZ_ErrorCode(*LPCAEN_DGTZ_GetDPPFirmwareType)(int, CAEN_DGTZ_DPPFirmware_t*);
+	LPCAEN_DGTZ_GetDPPFirmwareType lpCAEN_DGTZ_GetDPPFirmwareType = NULL;
+	long isCAEN_DGTZ_GetDPPFirmwareType = 0;
+	CAEN_DGTZ_ErrorCode  CAEN_DGTZ_GetDPPFirmwareType(int handle, CAEN_DGTZ_DPPFirmware_t* firmware)
+	{
+		if (hLinkdll)
+		{
+			if (FUNC_LOADED != isCAEN_DGTZ_GetDPPFirmwareType)
+			{
+				lpCAEN_DGTZ_GetDPPFirmwareType = NULL;
+				lpCAEN_DGTZ_GetDPPFirmwareType = (LPCAEN_DGTZ_GetDPPFirmwareType)GetProcAddress(hLinkdll, "CAEN_DGTZ_GetDPPFirmwareType");
+				isCAEN_DGTZ_GetDPPFirmwareType = FUNC_LOADED;
+			}
+			if (NULL != lpCAEN_DGTZ_GetDPPFirmwareType)
+				return lpCAEN_DGTZ_GetDPPFirmwareType(handle, firmware);
+			else
+				return (ERR_CANNOT_LOAD_FUNCTION);
+		}
+		else
+			return(ERR_CANNOT_LOAD_LIBRARY);
 	}
 
 };
