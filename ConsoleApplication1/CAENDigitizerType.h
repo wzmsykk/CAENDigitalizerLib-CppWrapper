@@ -258,6 +258,8 @@ CAEN_DGTZ_UnsupportedBaseAddress		= -34L,   /*  The Base Address is not supporte
 
 CAEN_DGTZ_NotYetImplemented             = -99L,   /* The function is not yet implemented            */
 
+ERR_CANNOT_LOAD_FUNCTION = -100L,
+ERR_CANNOT_LOAD_LIBRARY = -101L,
 }CAEN_DGTZ_ErrorCode; 
 
 #define CAEN_DGTZ_MAX_CHANNEL   MAX_V1730_CHANNEL_SIZE  /*!< \brief The number of channels */

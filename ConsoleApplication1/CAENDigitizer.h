@@ -273,7 +273,7 @@ virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_GetDESMode(int handle, CAEN_DGTZ_EnaDis_t 
 *                           DPP-PHA ignores it
 * \return  0 = Success; negative numbers are error codes
 ******************************************************************************/
-virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_SetRecordLength(int handle, uint32_t size, ...)=0;
+virtual CAEN_DGTZ_ErrorCode CAEN_DGTZ_SetRecordLength(int handle, uint32_t size, ...)=0;//Ôã¸âµÄ´úÂë
 
 
 /**************************************************************************//**
