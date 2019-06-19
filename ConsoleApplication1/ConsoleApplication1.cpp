@@ -30,6 +30,7 @@ int main()
 	
     std::cout << "Opened!\n";
 	ret = myCAENDigitalizer->CAEN_DGTZ_CloseDigitizer(handle[b]);
+
 QuitProgram:
 	return 0;
 }
