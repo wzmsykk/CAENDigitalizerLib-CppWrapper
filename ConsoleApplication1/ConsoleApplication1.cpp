@@ -4,6 +4,7 @@
 #include <iostream>
 #include "CAENDigitizerA.h"
 #define MAXNB 1
+
 int main()
 {
 
@@ -21,17 +22,21 @@ int main()
 	uint32_t numEvents;
 	i = sizeof(CAEN_DGTZ_TriggerMode_t);
 	const LPCTSTR DLLName = TEXT("CAENDigitizer.dll");
-	CAENDigitizer* myCAENDigitalizer = new CAENDigitizer(DLLName);
-	ret=myCAENDigitalizer->CAEN_DGTZ_OpenDigitizer(CAEN_DGTZ_USB, 0, 0, 0, &handle[b]);
+	CAENDigitizer* myCAEN = new CAENDigitizer(DLLName);
+	ret=myCAEN->CAEN_DGTZ_OpenDigitizer(CAEN_DGTZ_USB, 0, 0, 0, &handle[b]);
 	if (ret != CAEN_DGTZ_Success) {
-		printf("Can't open digitizer\n");
+		std::cout << "Can't open digitizer"<<std::endl;
 		goto QuitProgram;
 	}
+	ret = myCAEN->CAEN_DGTZ_GetInfo(handle[b], &BoardInfo);
+	std::cout<<"Connected to CAEN Digitizer Model"<<BoardInfo.ModelName<<"recognized as board "<< b<<(std::endl);
+	std::cout << "ROC FPGA Release is"<<BoardInfo.ROC_FirmwareRel<<std::endl;
+	std::cout << "AMC FPGA Release is"<<BoardInfo.AMC_FirmwareRel<< std::endl;
+    //std::cout << "Opened!\n";
+	ret = myCAEN->CAEN_DGTZ_CloseDigitizer(handle[b]);
 	
-    std::cout << "Opened!\n";
-	ret = myCAENDigitalizer->CAEN_DGTZ_CloseDigitizer(handle[b]);
-
 QuitProgram:
+	system("pause");
 	return 0;
 }
 

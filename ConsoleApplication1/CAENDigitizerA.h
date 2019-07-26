@@ -3,8 +3,9 @@
 #ifndef __CAENDIGITIZER_H
 #define __CAENDIGITIZER_H
 #endif
-#define win32
+#define WIN32
 #define IGNORE_DPP_DEPRECATED
+
 #include <stdarg.h>
 #include "CAENDigitizerType.h"
 

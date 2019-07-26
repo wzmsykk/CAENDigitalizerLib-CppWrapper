@@ -1,0 +1,4 @@
+CAENDigitizer.h 和 CAENDigitizerType.h 为C头文件
+CAENDigitizerA.h 和 CAENDigitizerType.h 为Cpp头文件
+lib中的CAENDigitizer.dll为库文件
+还包含一个测试程序测试digitizer的连接和读出型号
